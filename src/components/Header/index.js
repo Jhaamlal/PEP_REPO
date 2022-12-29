@@ -11,7 +11,7 @@ function Header() {
   };
 
   return (
-    <div className=' tw-bg-slate-300 tw-flex tw-text-black tw-p-4 tw-justify-between'>
+    <div className='tw-bg-white tw-flex tw-text-black tw-p-4 tw-justify-between'>
       <div className='tw-flex  tw-align-middle tw-justify-center'>
         {/* image header and name */}
         <img
@@ -32,6 +32,7 @@ function Header() {
                   selectedItem === item && 'tw-text-blue-400'
                 }`}
                 onClick={() => selectHandler(item)}
+                key={index}
               >
                 {item}
               </div>

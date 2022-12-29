@@ -1,10 +1,11 @@
-import Home from 'container/Home';
+import { Home, Levers } from './container';
 import './App.css';
 
 function App() {
   return (
-    <div>
+    <div className='tw-bg-slate-300 tw-h-screen'>
       <Home />
+      <Levers />
     </div>
   );
 }
