@@ -1,18 +1,14 @@
+import { useGetLevers } from 'api';
 import { Lever, Sectors } from 'components';
-import React, { useEffect, useState } from 'react';
-import { Leversdata } from 'services';
+import React, { useState } from 'react';
 
 function Levers() {
-  const [leverData, setLeverData] = useState([]);
   const [selectedLever, setSelectedLever] = useState('Agriculture');
   const leverObject = {};
-
-  useEffect(() => {
-    Leversdata.getAllLever().then((data) => setLeverData(data));
-  }, []);
+  const { data: levers } = useGetLevers();
 
   // function make
-  leverData?.map((item, index) => {
+  levers?.map((item, index) => {
     const isKeyExist = leverObject.hasOwnProperty(item['sector']);
     if (isKeyExist) {
       leverObject[item['sector']] += 1;
@@ -20,7 +16,6 @@ function Levers() {
       leverObject[item['sector']] = 0;
     }
   });
-
   delete leverObject['DuMmY'];
   delete leverObject['Test'];
   return (

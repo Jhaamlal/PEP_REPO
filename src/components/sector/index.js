@@ -1,13 +1,10 @@
 import { Checkbox } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { Leversdata } from 'services';
+import { useGetSingleLever } from 'api';
 
 function Sectors({ selectedLever }) {
-  const [sectorData, setSectorData] = useState([]);
   const selectedSectorsData = {};
-  const ref = useRef(true);
-  const [totalParents, setTotalParents] = useState([]);
   const [selectedSegment, setSelectedSegment] = useState('');
   const [grandParentSelected, setGrandparentSelected] = useState({
     isChecked: false,
@@ -16,13 +13,9 @@ function Sectors({ selectedLever }) {
   const [parentSelected, setParentSelected] = useState([]);
   const [childSelected, setChildSelected] = useState(false);
 
-  useEffect(() => {
-    Leversdata.getSelectedLever(selectedLever).then((data) =>
-      setSectorData(data),
-    );
-  }, [selectedLever]);
+  const { data: leverData } = useGetSingleLever(selectedLever);
 
-  sectorData?.map((item, index) => {
+  leverData?.map((item, index) => {
     const isKeyExist = selectedSectorsData.hasOwnProperty(item['segment']);
     if (isKeyExist) {
       const newObj = {

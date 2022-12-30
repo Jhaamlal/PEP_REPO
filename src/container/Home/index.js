@@ -1,18 +1,14 @@
+import { useGetLevers } from 'api';
 import { Header } from 'components';
-import React, { useEffect, useState } from 'react';
-import { Leversdata } from 'services';
+import React from 'react';
 
 function Home() {
-  const [totalLevers, setTotalLevers] = useState();
-  useEffect(() => {
-    Leversdata.getAllLever().then((data) => setTotalLevers(data.length));
-  }, []);
-
+  const { data: leversData } = useGetLevers();
   return (
     <div className=' '>
       <Header />
       <h1 className=' tw-font-serif tw-font-bold'>
-        Explore Levers #{totalLevers}
+        Explore Levers #{leversData?.length}
       </h1>
     </div>
   );
