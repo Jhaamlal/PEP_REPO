@@ -17,12 +17,16 @@ const objectWithIcons = {
   Power: <FaSuperpowers size={20} />,
 };
 
-function Lever({ leverObject }) {
+function Lever({ leverObject, setSelectedLever }) {
   return (
     <div className='tw-grid tw-grid-cols-5 tw-grid-flow-row tw-mt-4'>
       {Object.keys(leverObject).map((item, index) => {
         return (
-          <div className='tw-col-span-1 tw-flex tw-bg-slate-100 tw-rounded-md tw-p-2 tw-mx-3'>
+          <div
+            className='tw-col-span-1 tw-flex tw-bg-slate-100 tw-rounded-md tw-p-2 tw-mx-3'
+            onClick={() => setSelectedLever(item)}
+            key={index}
+          >
             <div className='tw-self-center tw-mx-2'>
               {objectWithIcons[item]}
             </div>
