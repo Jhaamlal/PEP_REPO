@@ -70,11 +70,10 @@ function Sectors({ selectedLever }) {
           isIndeterminate: prev[index]?.['isIndeterminate'],
         };
       }
-      console.log(newPrev[index]);
+
       return newPrev;
     });
   };
-  // console.log('parent selected', parentSelected);
 
   const totalParentsNumber = Object.keys(selectedSectorsData).length;
 
@@ -111,10 +110,6 @@ function Sectors({ selectedLever }) {
             onChange={grandParentSelectedHandler}
           />
           {Object.keys(selectedSectorsData).map((item, index) => {
-            console.log(
-              'Live fromm the array',
-              parentSelected?.[index]?.['isChecked'],
-            );
             return (
               <div className='tw-ml-2' key={index}>
                 <FormControlLabel
