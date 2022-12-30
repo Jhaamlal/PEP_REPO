@@ -23,7 +23,7 @@ function Lever({ leverObject, setSelectedLever }) {
       {Object.keys(leverObject).map((item, index) => {
         return (
           <div
-            className='tw-col-span-1 tw-flex tw-bg-slate-100 tw-rounded-md tw-p-2 tw-mx-3'
+            className='tw-col-span-1 tw-flex tw-bg-slate-100 tw-rounded-md tw-p-2 tw-mx-3 hover:tw-cursor-pointer'
             onClick={() => setSelectedLever(item)}
             key={index}
           >
