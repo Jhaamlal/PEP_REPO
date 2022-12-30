@@ -1,16 +1,17 @@
-import { Lever } from 'components';
+import { Lever, Sectors } from 'components';
 import React, { useEffect, useState } from 'react';
-import leversdata from 'services/lever';
+import { Leversdata } from 'services';
 
 function Levers() {
   const [leverData, setLeverData] = useState([]);
+  const [selectedLever, setSelectedLever] = useState('Agriculture');
   const leverObject = {};
-  const leverObjectWithIcon = {};
 
   useEffect(() => {
-    leversdata.getAllLever().then((data) => setLeverData(data));
+    Leversdata.getAllLever().then((data) => setLeverData(data));
   }, []);
 
+  // function make
   leverData?.map((item, index) => {
     const isKeyExist = leverObject.hasOwnProperty(item['sector']);
     if (isKeyExist) {
@@ -22,10 +23,10 @@ function Levers() {
 
   delete leverObject['DuMmY'];
   delete leverObject['Test'];
-
   return (
     <div>
-      <Lever leverObject={leverObject} />
+      <Lever leverObject={leverObject} setSelectedLever={setSelectedLever} />
+      <Sectors selectedLever={selectedLever} />
     </div>
   );
 }

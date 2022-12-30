@@ -1,11 +1,11 @@
 import { Header } from 'components';
 import React, { useEffect, useState } from 'react';
-import leversdata from 'services/lever';
+import { Leversdata } from 'services';
 
 function Home() {
   const [totalLevers, setTotalLevers] = useState();
   useEffect(() => {
-    leversdata.getAllLever().then((data) => setTotalLevers(data.length));
+    Leversdata.getAllLever().then((data) => setTotalLevers(data.length));
   }, []);
 
   return (
