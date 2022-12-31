@@ -11,7 +11,7 @@ function Sectors({ selectedLever }) {
     isIndeterminate: false,
   });
   const [parentSelected, setParentSelected] = useState([]);
-  const [childSelected, setChildSelected] = useState(false);
+  const [childSelected, setChildSelected] = useState({});
 
   const { data: leverData } = useGetSingleLever(selectedLever);
 
@@ -23,6 +23,9 @@ function Sectors({ selectedLever }) {
         category: item['category'],
         location: item['location'],
         description: item['description'],
+        id: item['uuid'],
+        sector: item['sector'],
+        segment: item['segment'],
       };
       selectedSectorsData[item['segment']].push(newObj);
     }
@@ -57,18 +60,18 @@ function Sectors({ selectedLever }) {
           isIndeterminate: false,
         };
         newPrev[index] = obj;
+        return newPrev;
       } else {
         newPrev[index] = {
           isChecked: !prev[index]?.['isChecked'],
           isIndeterminate: prev[index]?.['isIndeterminate'],
         };
+        return newPrev;
       }
-
-      return newPrev;
     });
   };
 
-  const totalParentsNumber = Object.keys(selectedSectorsData).length;
+  // const totalParentsNumber = Object.keys(selectedSectorsData).length;
 
   // useEffect(() => {
   //   let parent = [];
@@ -84,7 +87,79 @@ function Sectors({ selectedLever }) {
   //   setParentSelected(parent);
   // }, [selectedLever, selectedSegment]);
 
-  const childChangeHandler = () => {};
+  // let sectoObj = {
+  //   Agricultue: {
+  //     tractor: [],
+  //     segment: [],
+  //   },
+  //   industry: {
+  //     compound: [],
+  //     almunia: [],
+  //   },
+  // };
+
+  const childChangeHandler = (item) => {
+    const isSectorExist = childSelected.hasOwnProperty(item['sector']);
+    console.log('CHALA ');
+
+    // if nahi
+    if (!isSectorExist) {
+      const sectorObj = {};
+      sectorObj[item['sector']] = {};
+      sectorObj[item['sector']][item['segment']] = [];
+      sectorObj[item['sector']][item['segment']].push(item['id']);
+
+      setChildSelected((prev) => {
+        return { ...prev, ...sectorObj };
+      });
+    } else {
+      const sectorObj = {};
+      const isSegmentExist = childSelected[item['sector']].hasOwnProperty(
+        item['segment'],
+      );
+      if (!isSegmentExist) {
+        sectorObj[item['sector']][item['segment']] = [];
+        sectorObj[item['sector']][item['segment']].push(item['id']);
+        setChildSelected((prev) => {
+          return { ...prev, ...sectorObj };
+        });
+      }
+      if (isSegmentExist) {
+        const idExist = childSelected[item['sector']][item['segment']].includes(
+          item['id'],
+        );
+        if (idExist) {
+          childSelected[item['sector']][item['segment']] = childSelected[
+            item['sector']
+          ][item['segment']].filter((id) => id !== item['id']);
+          setChildSelected((prev) => {
+            return { ...prev };
+          });
+        }
+        if (!idExist) {
+          sectorObj[item['sector']][item['segment']].push(item['id']);
+          setChildSelected((prev) => {
+            return { ...prev, ...sectorObj };
+          });
+        }
+      }
+    }
+
+    if (isSectorExist) {
+      // then chack that segment existed
+    }
+
+    return;
+    // segment:[]
+    // sectore:{
+
+    // }
+    // Agriculture:{
+    // segment1:[id]
+    // }
+  };
+
+  console.log('sector obj', childSelected);
   // console.log('parent selcted', parentSelected);
 
   return (
