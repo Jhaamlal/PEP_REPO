@@ -15,8 +15,8 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div className='tw-bg-slate-300 tw-h-screen'>
         <Home />
-        <Levers />
-        {/* <ProjectForm /> */}
+        {/* <Levers /> */}
+        <ProjectForm />
       </div>
     </QueryClientProvider>
   );
