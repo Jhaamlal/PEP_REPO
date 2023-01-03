@@ -1,6 +1,6 @@
-import { Home, Levers } from 'container';
+import { FormComponent, Home, Levers } from 'container';
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
 const HomeComponents = () => {
   return (
@@ -13,9 +13,12 @@ const HomeComponents = () => {
 function AppRouter() {
   return (
     <div>
-      <Routes>
-        <Route path='/' element={<HomeComponents />} />
-      </Routes>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<HomeComponents />} />
+          <Route path='/form' element={<FormComponent />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

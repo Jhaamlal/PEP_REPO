@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 let logo =
   'https://thumbs.dreamstime.com/b/teamwork-community-logo-design-vector-adoption-social-network-template-156215000.jpg';
@@ -9,6 +10,8 @@ function Header() {
   const selectHandler = (selected) => {
     setSelectedItem(selected);
   };
+
+  const navigation = useNavigate();
 
   return (
     <div className='tw-bg-white tw-flex tw-text-black tw-p-4 tw-justify-between'>
