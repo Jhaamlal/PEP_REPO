@@ -32,7 +32,7 @@ function Lever({ leverObject, setSelectedLever }) {
             </div>
             <div className=''>
               <p>{item}</p>
-              <p>{`0/${leverObject[item]} Levers selected`}</p>
+              <p>{`0/${leverObject[item]['total']} Levers selected`}</p>
             </div>
           </div>
         );

@@ -9,19 +9,37 @@ function Levers() {
 
   // function make
   levers?.map((item, index) => {
-    const isKeyExist = leverObject.hasOwnProperty(item['sector']);
-    if (isKeyExist) {
-      leverObject[item['sector']] += 1;
+    const isSectorExist = leverObject.hasOwnProperty(item['sector']);
+
+    if (isSectorExist) {
+      const isSegemntExist = leverObject?.[item['sector']]?.hasOwnProperty(
+        item['segment'],
+      );
+      if (isSegemntExist) {
+        leverObject[item['sector']]['total'] += 1;
+        leverObject[item['sector']][item['segment']] += 1;
+      }
+      if (!isSegemntExist) {
+        leverObject[item['sector']] = {
+          ...leverObject[item['sector']],
+          [item['segment']]: 0,
+        };
+      }
     } else {
-      leverObject[item['sector']] = 0;
+      leverObject[item['sector']] = {
+        total: 0,
+        [item['segment']]: 0,
+      };
     }
+    return '';
   });
   delete leverObject['DuMmY'];
   delete leverObject['Test'];
+
   return (
     <div>
       <Lever leverObject={leverObject} setSelectedLever={setSelectedLever} />
-      <Sectors selectedLever={selectedLever} />
+      <Sectors selectedLever={selectedLever} leverObject={leverObject} />
     </div>
   );
 }
