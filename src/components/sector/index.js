@@ -2,6 +2,12 @@ import { Checkbox } from '@mui/material';
 import React, { useState } from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { useGetSingleLever } from 'api';
+import { useDispatch } from 'react-redux';
+import {
+  childrenUpdate,
+  grandParentUpdate,
+  parentUpdate,
+} from '../../Store/Features/leverSlice';
 
 // let x = {
 //   Agricultue: {
@@ -59,10 +65,9 @@ function Sectors({ selectedLever, leverObject }) {
   const [grandParentSelected, setGrandparentSelected] = useState({});
   const [parentSelected, setParentSelected] = useState([]);
   const [childSelected, setChildSelected] = useState({});
+  const dispatch = useDispatch();
 
   const { data: leverData } = useGetSingleLever(selectedLever);
-  //  isChecked: false,
-  //     isIndeterminate: false,
   leverData?.map((item, index) => {
     const isKeyExist = selectedSectorsData.hasOwnProperty(item['segment']);
     if (isKeyExist) {
@@ -90,6 +95,14 @@ function Sectors({ selectedLever, leverObject }) {
 
     const isSectorExist = grandParentSelected.hasOwnProperty(
       leverData[0]['sector'],
+    );
+
+    dispatch(
+      grandParentUpdate({
+        selectedSectorsData,
+        selectedSector: leverData[0]['sector'],
+        leversObjectData: leverObject,
+      }),
     );
 
     // if (!isSectorExist) {
@@ -148,26 +161,20 @@ function Sectors({ selectedLever, leverObject }) {
       }
       return allObjects;
     });
-    // }
-    // if (isSectorExist) {
-    //   const removeFromTotal =
-    //     grandParentSelected[leverData[0]['sector']]['totalSegmentSelected'];
-    //   grandParentSelected['totalSelected'] =
-    //     grandParentSelected['totalSelected'] - removeFromTotal;
-    //   grandParentSelected[leverData[0]['sector']] = {
-    //     isChecked: false,
-    //     isIntermeideate: false,
-    //     totalSegmentSelected: 0,
-    //   };
-    //   delete grandParentSelected[leverData[0]['sector']];
-    //   console.log('grand parent', grandParentSelected);
-    // }
   };
 
   const parentChangehandler = ({ item, index, event }) => {
     event.preventDefault();
     event.stopPropagation();
     setSelectedSegment(item);
+
+    dispatch(
+      parentUpdate({
+        selectedSectorSegments: selectedSectorsData,
+        selectedSegment: item,
+        selectedSector: leverData[0]['sector'],
+      }),
+    );
 
     // agar nahi hai
     let obj = { ...grandParentSelected };
@@ -308,13 +315,6 @@ function Sectors({ selectedLever, leverObject }) {
 
     return;
   };
-
-  // console.log('child selected selcted', childSelected);
-
-  console.log('grand parent selected', grandParentSelected);
-  console.log('is checkeed grand parent ', grandParentSelected);
-  console.log('is checkeed', leverData?.[0]?.['sector']);
-  // console.log('selcted sector data', selectedSectorsData);
   return (
     <>
       <div className='tw-grid tw-grid-cols-6 tw-h-96 tw-gap-4 tw-mt-8 tw-mx-4'>
@@ -338,7 +338,6 @@ function Sectors({ selectedLever, leverObject }) {
             />
           </div>
           {Object.keys(selectedSectorsData).map((item, index) => {
-            console.log('item', item);
             return (
               <div className='tw-ml-2' key={index}>
                 <FormControlLabel
