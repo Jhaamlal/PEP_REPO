@@ -2,9 +2,10 @@ import { Checkbox } from '@mui/material';
 import React, { useState } from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { useGetSingleLever } from 'api';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
-  childrenUpdate,
+  childUpdate,
   grandParentUpdate,
   parentUpdate,
 } from '../../Store/Features/leverSlice';
@@ -66,8 +67,10 @@ function Sectors({ selectedLever, leverObject }) {
   const [parentSelected, setParentSelected] = useState([]);
   const [childSelected, setChildSelected] = useState({});
   const dispatch = useDispatch();
+  const selector = useSelector((state) => state.levers.sectorData);
 
   const { data: leverData } = useGetSingleLever(selectedLever);
+
   leverData?.map((item, index) => {
     const isKeyExist = selectedSectorsData.hasOwnProperty(item['segment']);
     if (isKeyExist) {
@@ -258,6 +261,14 @@ function Sectors({ selectedLever, leverObject }) {
     console.log('Lever object', leverObject);
     const isSectorExist = grandParentSelected.hasOwnProperty(item['sector']);
 
+    dispatch(
+      childUpdate({
+        selectedSectorSegments: selectedSectorsData,
+        selectedItem: item,
+        selectedSector: leverData[0]['sector'],
+      }),
+    );
+
     if (!isSectorExist) {
       let obj = {
         totalSelected: 0,
@@ -270,6 +281,46 @@ function Sectors({ selectedLever, leverObject }) {
       };
     }
 
+    // if (!isSectorExist) {
+    //   const sectorObj = {};
+    //   sectorObj[item['sector']] = {};
+    //   sectorObj[item['sector']][item['segment']] = [];
+    //   sectorObj[item['sector']][item['segment']].push(item['id']);
+
+    //   setChildSelected((prev) => {
+    //     return { ...prev, ...sectorObj };
+    //   });
+    // }
+    // if (isSectorExist) {
+    //   const isSegmentExist = childSelected[item['sector']].hasOwnProperty(
+    //     item['segment'],
+    //   );
+    //   if (!isSegmentExist) {
+    //     childSelected[item['sector']][item['segment']] = [];
+    //     childSelected[item['sector']][item['segment']].push(item['id']);
+    //     setChildSelected((prev) => {
+    //       return { ...prev };
+    //     });
+    //   }
+    //   if (isSegmentExist) {
+    //     const idExist = childSelected[item['sector']][item['segment']].includes(
+    //       item['id'],
+    //     );
+    //     if (idExist) {
+    //       childSelected[item['sector']][item['segment']] = childSelected[
+    //         item['sector']
+    //       ][item['segment']].filter((id) => id !== item['id']);
+    //       setChildSelected((prev) => {
+    //         return { ...prev };
+    //       });
+    //     }
+    //     if (!idExist) {
+    //       childSelected[item['sector']][item['segment']].push(item['id']);
+    //       setChildSelected((prev) => {
+    //         return { ...prev };
+    //       });
+    //     }
+    //   }
     // if nahi
     // if (!isSectorExist) {
     //   const sectorObj = {};

@@ -134,10 +134,101 @@ const leversSclice = createSlice({
       grandTotal();
     },
 
-    childrenUpdate: (state, { payload }) => {},
+    childUpdate: (state, { payload }) => {
+      const { selectedSectorSegments, selectedItem, selectedSector } = payload;
+
+      const selectedSegment = selectedItem['segment'];
+
+      const allSectorData = { ...state.sectorData };
+
+      const hasSegment =
+        allSectorData[selectedSector].hasOwnProperty(selectedSegment);
+
+      // if segemnt,and child nahi hai
+      if (hasSegment) {
+        const hasChild = allSectorData[selectedSector][
+          selectedSegment
+        ].selectedChild.includes(selectedItem['id']);
+
+        if (!hasChild) {
+          allSectorData[selectedSector][selectedSegment] = {
+            ...allSectorData[selectedSector][selectedSegment],
+            selectedChild: allSectorData[selectedSector][selectedSegment][
+              'selectedChild'
+            ].push(selectedItem['id']),
+            segmentSelected:
+              allSectorData[selectedSector][selectedSegment][
+                'segmentSelected'
+              ] + 1,
+          };
+          allSectorData[selectedSector] = {
+            ...allSectorData[selectedSector],
+            totalSegmentSelected:
+              allSectorData[selectedSector]['totalSegmentSelected'] + 1,
+          };
+        }
+        if (hasChild) {
+          allSectorData[selectedSector][selectedSegment] = {
+            ...allSectorData[selectedSector][selectedSegment],
+            selectedChild: allSectorData[selectedSector][selectedSegment][
+              'selectedChild'
+            ].filter((item) => item !== selectedItem['id']),
+            segmentSelected:
+              allSectorData[selectedSector][selectedSegment][
+                'segmentSelected'
+              ] - 1,
+          };
+          allSectorData[selectedSector] = {
+            ...allSectorData[selectedSector],
+            totalSegmentSelected:
+              allSectorData[selectedSector]['totalSegmentSelected'] - 1,
+          };
+        }
+      }
+      console.log(allSectorData);
+      // if no segment
+      if (!hasSegment) {
+        allSectorData[selectedSector] = {
+          ...allSectorData[selectedSector],
+          [selectedSegment]: {
+            isChecked: true,
+            isIntermeideate: false,
+            segmentSelected: 0,
+            selectedChild: [],
+          },
+        };
+
+        selectedSectorSegments[selectedSegment] = {
+          ...selectedSectorSegments[selectedSegment],
+          selectedChild: selectedSectorSegments[selectedSegment][
+            'selectedChild'
+          ].push(selectedItem['id']),
+          segmentSelected: 1,
+          totalSegmentSelected:
+            allSectorData[selectedSector]['totalSegmentSelected'] + 1,
+        };
+      }
+      console.log(allSectorData);
+      let total = 0;
+      function grandTotal() {
+        for (
+          let index = 0;
+          index < Object.keys(allSectorData).length - 1;
+          index++
+        ) {
+          total +=
+            allSectorData[Object.keys(allSectorData)[index]][
+              'totalSegmentSelected'
+            ];
+        }
+        console.log('total', total);
+        state.sectorData = { ...allSectorData, grandTotal: total };
+      }
+      grandTotal();
+    },
   },
 });
 
 export default leversSclice.reducer;
-export const { grandParentUpdate, parentUpdate, childrenUpdate } =
+export const { grandParentUpdate, parentUpdate, childUpdate } =
   leversSclice.actions;
