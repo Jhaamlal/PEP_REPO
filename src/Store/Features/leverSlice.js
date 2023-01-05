@@ -36,44 +36,63 @@ const leversSclice = createSlice({
   initialState,
   reducers: {
     grandParentUpdate: (state, { payload }) => {
-      const { selectedSectorsData, selectedSector } = payload;
+      const { selectedSectorsData, selectedSector, leversObjectData } = payload;
 
-      Object.keys(selectedSectorsData).map((item, index) => {
-        state.sectorData[selectedSector]['totalSegmentSelected'] +=
-          selectedSectorsData[item].length;
-      });
+      const isChecked = state.sectorData[selectedSector]?.['isChecked'];
 
-      let obj2 = {};
-      for (
-        let index = 0;
-        index < Object.keys(selectedSectorsData).length;
-        index++
-      ) {
-        obj2[Object.keys(selectedSectorsData)[index]] = {
-          isChecked: true,
-          isIntermeideate: true,
-          selectedChild: [],
-          segmentSelected:
-            selectedSectorsData[Object.keys(selectedSectorsData)[index]].length,
+      let allSectorData = { ...state.sectorData };
+
+      if (isChecked) {
+        allSectorData = {
+          ...allSectorData,
+          [selectedSector]: {
+            isChecked: false,
+            isIntermeideate: false,
+            totalSegmentSelected: 0,
+          },
         };
       }
 
-      state.sectorData[selectedSector] = {
-        ...state.sectorData[selectedSector],
-        ...obj2,
-      };
-
-      Object.keys(selectedSectorsData).map((sectorKey, index) => {
-        selectedSectorsData[sectorKey].map((item) => {
-          state.sectorData[selectedSector][sectorKey]['selectedChild'].push(
-            item['id'],
-          );
-          return;
+      if (!isChecked) {
+        Object.keys(selectedSectorsData).map((item, index) => {
+          allSectorData[selectedSector]['totalSegmentSelected'] +=
+            selectedSectorsData[item].length;
         });
-        return '';
-      });
 
-      const allSectorData = { ...state.sectorData };
+        let obj2 = {};
+        for (
+          let index = 0;
+          index < Object.keys(selectedSectorsData).length;
+          index++
+        ) {
+          obj2[Object.keys(selectedSectorsData)[index]] = {
+            isChecked: true,
+            isIntermeideate: false,
+            selectedChild: [],
+            segmentSelected:
+              selectedSectorsData[Object.keys(selectedSectorsData)[index]]
+                .length,
+          };
+        }
+
+        allSectorData[selectedSector] = {
+          ...allSectorData[selectedSector],
+          isChecked: true,
+          isIntermeideate: false,
+          ...obj2,
+        };
+
+        Object.keys(selectedSectorsData).map((sectorKey, index) => {
+          selectedSectorsData[sectorKey].map((item) => {
+            allSectorData[selectedSector][sectorKey]['selectedChild'].push(
+              item['id'],
+            );
+            return;
+          });
+          return '';
+        });
+      }
+
       // let total = allSectorData.grandTotal;
       let total = 0;
       function grandTotal() {
@@ -98,23 +117,68 @@ const leversSclice = createSlice({
         payload;
       const allSectorData = { ...state.sectorData };
 
+      const isSegmentExist =
+        allSectorData[selectedSector].hasOwnProperty(selectedSegment);
+
+      // if existed means you want to remove it ,else you want to add that ,
+      if (isSegmentExist) {
+        const segmentSelected =
+          allSectorData[selectedSector]?.[selectedSegment]['segmentSelected'];
+        delete allSectorData[selectedSector]?.[selectedSegment];
+        allSectorData[selectedSector]['totalSegmentSelected'] -=
+          segmentSelected;
+      }
+
+      if (!isSegmentExist) {
+        allSectorData[selectedSector] = {
+          ...allSectorData[selectedSector],
+          [selectedSegment]: {
+            isChecked: true,
+            isIntermeideate: false,
+            segmentSelected: 0,
+            selectedChild: [],
+          },
+        };
+        selectedSectorSegments[selectedSegment].map((item1, index) => {
+          allSectorData[selectedSector][selectedSegment]['selectedChild'].push(
+            item1.id,
+          );
+          allSectorData[selectedSector][selectedSegment][
+            'segmentSelected'
+          ] += 1;
+          allSectorData[selectedSector]['totalSegmentSelected'] += 1;
+          return '';
+        });
+      }
+      let isChecked = 0;
+      let isUncheacked = 0;
+      let isGPSelected = false;
+      let isGPIntermidiate = false;
+      const allSectorKeys = Object.keys(selectedSectorSegments);
+      for (const key of allSectorKeys) {
+        const isKeyChecked = !!allSectorData[selectedSector]?.[key]?.isChecked;
+        if (isKeyChecked) {
+          isChecked += 1;
+        }
+        if (!isKeyChecked) {
+          isUncheacked += 1;
+        }
+      }
+
+      allSectorKeys.length === isChecked
+        ? (isGPSelected = true)
+        : (isGPIntermidiate = true);
+
+      if (isChecked === 0) {
+        isGPSelected = false;
+        isGPIntermidiate = false;
+      }
+
       allSectorData[selectedSector] = {
         ...allSectorData[selectedSector],
-        [selectedSegment]: {
-          isChecked: true,
-          isIntermeideate: false,
-          segmentSelected: 0,
-          selectedChild: [],
-        },
+        isChecked: isGPSelected,
+        isIntermeideate: isGPIntermidiate,
       };
-      selectedSectorSegments[selectedSegment].map((item1, index) => {
-        allSectorData[selectedSector][selectedSegment]['selectedChild'].push(
-          item1.id,
-        );
-        allSectorData[selectedSector][selectedSegment]['segmentSelected'] += 1;
-        allSectorData[selectedSector]['totalSegmentSelected'] += 1;
-        return '';
-      });
 
       let total = 0;
       function grandTotal() {
@@ -153,7 +217,7 @@ const leversSclice = createSlice({
         if (!hasChild) {
           allSectorData[selectedSector][selectedSegment] = {
             ...allSectorData[selectedSector][selectedSegment],
-            selectedChild: allSectorData[selectedSector][selectedSegment][
+            ...allSectorData[selectedSector][selectedSegment][
               'selectedChild'
             ].push(selectedItem['id']),
             segmentSelected:
@@ -185,7 +249,7 @@ const leversSclice = createSlice({
           };
         }
       }
-      console.log(allSectorData);
+
       // if no segment
       if (!hasSegment) {
         allSectorData[selectedSector] = {
@@ -197,18 +261,23 @@ const leversSclice = createSlice({
             selectedChild: [],
           },
         };
-
-        selectedSectorSegments[selectedSegment] = {
-          ...selectedSectorSegments[selectedSegment],
-          selectedChild: selectedSectorSegments[selectedSegment][
+        allSectorData[selectedSector][selectedSegment] = {
+          ...allSectorData[selectedSector][selectedSegment],
+          ...allSectorData[selectedSector][selectedSegment][
             'selectedChild'
           ].push(selectedItem['id']),
           segmentSelected: 1,
+        };
+
+        console.log('error', allSectorData);
+
+        allSectorData[selectedSector] = {
+          ...allSectorData[selectedSector],
           totalSegmentSelected:
             allSectorData[selectedSector]['totalSegmentSelected'] + 1,
         };
       }
-      console.log(allSectorData);
+
       let total = 0;
       function grandTotal() {
         for (
@@ -221,10 +290,56 @@ const leversSclice = createSlice({
               'totalSegmentSelected'
             ];
         }
-        console.log('total', total);
         state.sectorData = { ...allSectorData, grandTotal: total };
       }
       grandTotal();
+
+      const isAllChildSelected =
+        selectedSectorSegments[selectedSegment].length <=
+        allSectorData[selectedSector][selectedSegment]['segmentSelected'];
+
+      // agar false hai
+      if (!isAllChildSelected) {
+        allSectorData[selectedSector] = {
+          ...allSectorData[selectedSector],
+          isChecked: false,
+          isIntermeideate: true,
+        };
+        allSectorData[selectedSector][selectedSegment] = {
+          ...allSectorData[selectedSector][selectedSegment],
+          isChecked: false,
+          isIntermeideate: true,
+        };
+        const isAllRemove =
+          allSectorData[selectedSector][selectedSegment]['segmentSelected'] ===
+          0;
+
+        if (isAllRemove) {
+          allSectorData[selectedSector] = {
+            ...allSectorData[selectedSector],
+            isChecked: false,
+            isIntermeideate: false,
+          };
+          allSectorData[selectedSector][selectedSegment] = {
+            ...allSectorData[selectedSector][selectedSegment],
+            isChecked: false,
+            isIntermeideate: false,
+          };
+        }
+      }
+      if (isAllChildSelected) {
+        allSectorData[selectedSector] = {
+          ...allSectorData[selectedSector],
+          isChecked: true,
+          isIntermeideate: false,
+        };
+        allSectorData[selectedSector][selectedSegment] = {
+          ...allSectorData[selectedSector][selectedSegment],
+          isChecked: true,
+          isIntermeideate: false,
+        };
+      }
+      state.sectorData = { ...allSectorData };
     },
   },
 });

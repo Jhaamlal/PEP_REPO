@@ -1,5 +1,5 @@
-import { Checkbox } from '@mui/material';
-import React, { useState } from 'react';
+import { Button, Checkbox } from '@mui/material';
+import React, { useState, useEffect } from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { useGetSingleLever } from 'api';
 import { useDispatch, useSelector } from 'react-redux';
@@ -64,10 +64,10 @@ function Sectors({ selectedLever, leverObject }) {
   const selectedSectorsData = {};
   const [selectedSegment, setSelectedSegment] = useState('');
   const [grandParentSelected, setGrandparentSelected] = useState({});
-  const [parentSelected, setParentSelected] = useState([]);
-  const [childSelected, setChildSelected] = useState({});
+  const [totalSegments, setTotalSegments] = useState(0);
   const dispatch = useDispatch();
   const selector = useSelector((state) => state.levers.sectorData);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const { data: leverData } = useGetSingleLever(selectedLever);
 
@@ -90,16 +90,17 @@ function Sectors({ selectedLever, leverObject }) {
     }
   });
 
+  const selectedSector = leverData?.[0]?.['sector'];
+
+  useEffect(() => {
+    const defaultSelect = Object.keys(selectedSectorsData)[0];
+    setSelectedSegment(defaultSelect);
+    setTotalSegments(Object.keys(selectedSectorsData).length);
+    const isZeroItemSelected = selector.grandTotal === 0;
+    setIsButtonDisabled(isZeroItemSelected);
+  }, [selectedSector]);
+
   const grandParentSelectedHandler = () => {
-    console.log('log segment', selectedSectorsData);
-    console.log('LeverData', leverData[0]['sector']);
-    console.log('Lever object', leverObject);
-    console.count('gp');
-
-    const isSectorExist = grandParentSelected.hasOwnProperty(
-      leverData[0]['sector'],
-    );
-
     dispatch(
       grandParentUpdate({
         selectedSectorsData,
@@ -107,63 +108,6 @@ function Sectors({ selectedLever, leverObject }) {
         leversObjectData: leverObject,
       }),
     );
-
-    // if (!isSectorExist) {
-    let obj2 = {};
-    let obj = {
-      totalSelected: 0,
-    };
-
-    obj[leverData[0]['sector']] = {
-      isChecked: true,
-      isIntermeideate: false,
-      totalSegmentSelected: 0,
-    };
-
-    Object.keys(selectedSectorsData).map((item, index) => {
-      console.log(item);
-      obj[leverData[0]['sector']]['totalSegmentSelected'] +=
-        selectedSectorsData[item].length;
-    });
-
-    for (
-      let index = 0;
-      index < Object.keys(selectedSectorsData).length;
-      index++
-    ) {
-      obj2[Object.keys(selectedSectorsData)[index]] = {
-        isChecked: true,
-        isIntermeideate: true,
-        selectedChild: [],
-        segmentSelected:
-          selectedSectorsData[Object.keys(selectedSectorsData)[index]].length,
-      };
-    }
-    console.log('object 2', obj2);
-
-    obj[leverData[0]['sector']] = { ...obj[leverData[0]['sector']], ...obj2 };
-    console.log('object', obj);
-    Object.keys(selectedSectorsData).map((sectorKey, index) => {
-      console.log(selectedSectorsData[sectorKey]);
-      console.log(obj[leverData[0]['sector']][sectorKey]['selectedChild']);
-      selectedSectorsData[sectorKey].map((item) => {
-        obj[leverData[0]['sector']][sectorKey]['selectedChild'].push(
-          item['id'],
-        );
-        return;
-      });
-      return '';
-    });
-
-    setGrandparentSelected((prev) => {
-      const allObjects = { ...prev, ...obj };
-      Object.keys(allObjects);
-      for (let index = 1; index < Object.keys(allObjects).length; index++) {
-        allObjects[Object.keys(allObjects)[0]] +=
-          allObjects[Object.keys(allObjects)[index]]['totalSegmentSelected'];
-      }
-      return allObjects;
-    });
   };
 
   const parentChangehandler = ({ item, index, event }) => {
@@ -254,6 +198,7 @@ function Sectors({ selectedLever, leverObject }) {
     }
   };
 
+  // console.log(selector[selectedSector]);
   const childChangeHandler = ({ item, event, index }) => {
     event.preventDefault();
     console.log('log segment', selectedSectorsData);
@@ -369,23 +314,20 @@ function Sectors({ selectedLever, leverObject }) {
   return (
     <>
       <div className='tw-grid tw-grid-cols-6 tw-h-96 tw-gap-4 tw-mt-8 tw-mx-4'>
-        <div className='tw-col-span-1 tw-bg-slate-50 '>
-          <div className='tw-mt-4 tw-font-bold tw-ml-2'>4 Segment</div>
+        <div className='tw-col-span-1 tw-bg-slate-50  '>
+          <div className='tw-mt-4 tw-font-bold tw-ml-2'>{`${totalSegments} Segments`}</div>
           <div>
             <FormControlLabel
               label={'SelectAll'}
               control={
                 <Checkbox
-                  checked={
-                    !!grandParentSelected[leverData?.[0]?.['sector']]?.isChecked
-                  }
+                  checked={!!selector[selectedSector]?.['isChecked']}
                   indeterminate={
-                    !!grandParentSelected[leverData?.[0]?.['sector']]
-                      ?.isIndeterminate
+                    !!selector[selectedSector]?.['isIntermeideate']
                   }
+                  onChange={grandParentSelectedHandler}
                 />
               }
-              onChange={grandParentSelectedHandler}
             />
           </div>
           {Object.keys(selectedSectorsData).map((item, index) => {
@@ -395,9 +337,11 @@ function Sectors({ selectedLever, leverObject }) {
                   label={item}
                   control={
                     <Checkbox
-                      checked={!!parentSelected?.[index]?.['isChecked']}
+                      checked={
+                        !!selector[selectedSector]?.[item]?.['isChecked']
+                      }
                       indeterminate={
-                        parentSelected?.[index]?.['isIndeterminate']
+                        !!selector[selectedSector]?.[item]?.['isIntermeideate']
                       }
                     />
                   }
@@ -409,7 +353,7 @@ function Sectors({ selectedLever, leverObject }) {
             );
           })}
         </div>
-        <div className='tw-col-span-5 tw-bg-slate-50'>
+        <div className='tw-col-span-5 tw-bg-slate-50 '>
           <div className='tw-grid tw-grid-cols-4 tw-p-2 tw-gap-4 tw-bg-slate-800 tw-text-white'>
             <div className='tw-col-span-1'>Lever Name</div>
             <div className='tw-col-span-1'>Category</div>
@@ -417,9 +361,9 @@ function Sectors({ selectedLever, leverObject }) {
             <div className='tw-col-span-1'>Description</div>
           </div>
           {selectedSectorsData[selectedSegment]?.map((item, index) => {
-            const isChecked = !!childSelected?.[item['sector']]?.[
-              item['segment']
-            ]?.includes(item['id']);
+            const isChecked = !!selector[selectedSector]?.[selectedSegment]?.[
+              'selectedChild'
+            ]?.includes(item.id);
             return (
               <div
                 className='tw-grid tw-grid-cols-4 tw-px-2 tw-gap-2'
@@ -446,6 +390,13 @@ function Sectors({ selectedLever, leverObject }) {
             );
           })}
         </div>
+      </div>
+      <div className='tw-flex tw-justify-between tw-sticky tw-bottom-0 tw-bg-white tw-px-8 tw-py-4'>
+        <div className='tw-p-2 '>{`Total : ${selector?.grandTotal}`}</div>
+
+        <Button variant='contained' disabled={isButtonDisabled}>
+          Proced to add Project Info
+        </Button>
       </div>
     </>
   );
