@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { useGetSingleLever } from 'api';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { AiOutlineArrowRight } from 'react-icons/ai';
 import {
   childUpdate,
   grandParentUpdate,
@@ -101,6 +101,12 @@ function Sectors({ selectedLever, leverObject }) {
     );
   };
 
+  const showSegmentChild = ({ item, event }) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setSelectedSegment(item);
+  };
+
   const childChangeHandler = ({ item, event, index }) => {
     event.preventDefault();
     dispatch(
@@ -132,7 +138,12 @@ function Sectors({ selectedLever, leverObject }) {
           </div>
           {Object.keys(selectedSectorsData).map((item, index) => {
             return (
-              <div className='tw-ml-2' key={index}>
+              <div
+                className={`tw-ml-2 tw-flex tw-justify-between ${
+                  selectedSegment === item && 'tw-bg-blue-200'
+                }`}
+                key={index}
+              >
                 <FormControlLabel
                   label={item}
                   control={
@@ -148,6 +159,10 @@ function Sectors({ selectedLever, leverObject }) {
                   onClick={(event) =>
                     parentChangehandler({ item, index, event })
                   }
+                />
+                <AiOutlineArrowRight
+                  className='tw-self-center tw-mr-4 tw-cursor-pointer'
+                  onClick={(event) => showSegmentChild({ event, item })}
                 />
               </div>
             );
