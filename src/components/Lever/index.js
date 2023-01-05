@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   FaTractor,
@@ -8,6 +8,7 @@ import {
   FaSuperpowers,
 } from 'react-icons/fa';
 import { MdEmojiTransportation } from 'react-icons/md';
+import { useSelector } from 'react-redux';
 
 const objectWithIcons = {
   Agriculture: <FaTractor size={20} />,
@@ -18,9 +19,11 @@ const objectWithIcons = {
 };
 
 function Lever({ leverObject, setSelectedLever }) {
+  const selector = useSelector((state) => state.levers.sectorData);
   return (
     <div className='tw-grid tw-grid-cols-5 tw-grid-flow-row tw-mt-4'>
       {Object.keys(leverObject).map((item, index) => {
+        const totalChildSelected = selector[item]['totalSegmentSelected'];
         return (
           <div
             className='tw-col-span-1 tw-flex tw-bg-slate-100 tw-rounded-md tw-p-2 tw-mx-3 hover:tw-cursor-pointer'
@@ -32,7 +35,7 @@ function Lever({ leverObject, setSelectedLever }) {
             </div>
             <div className=''>
               <p>{item}</p>
-              <p>{`0/${leverObject[item]} Levers selected`}</p>
+              <p>{`${totalChildSelected}/${leverObject[item]['total']} Levers selected`}</p>
             </div>
           </div>
         );

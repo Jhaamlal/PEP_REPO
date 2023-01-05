@@ -11,7 +11,7 @@ function ProjectForm() {
     projectName: '',
     projectType: '',
     startDate: todays,
-    endData: '',
+    endData: todays,
     descriptions: '',
   });
 
@@ -22,7 +22,7 @@ function ProjectForm() {
   const [chargeCode, setChargeCode] = useState({
     value: '',
     errorMessage: '',
-    error: false,
+    error: true,
   });
 
   const [peopleDetails, setPeopleDetails] = useState({
@@ -118,14 +118,14 @@ function ProjectForm() {
         <hr className='tw-h-8 tw-min-w-full tw-col-span-6'></hr>
         <div className='tw-col-span-6 '>
           <div className='tw-flex tw-justify-end  tw-my-4 tw-mx-4'>
-            <Button variant='outlined' className='tw-mx-4' onClick={handleOpen}>
-              Cancel
-            </Button>
             <Button
               variant='outlined'
-              className='tw-mx-4'
-              disabled={!isReadyToSubmit}
+              sx={{ marginRight: 2 }}
+              onClick={handleOpen}
             >
+              Cancel
+            </Button>
+            <Button variant='outlined' disabled={!isReadyToSubmit}>
               Procced
             </Button>
           </div>
