@@ -6,12 +6,17 @@ let logo =
 function Header() {
   let headers = ['Home', 'Lever', 'My Project'];
   const [selectedItem, setSelectedItem] = useState('Home');
+  const navigation = useNavigate();
 
   const selectHandler = (selected) => {
+    if (selected === 'Lever') {
+      navigation('/form');
+    }
+    if (selected === 'Home') {
+      navigation('/');
+    }
     setSelectedItem(selected);
   };
-
-  const navigation = useNavigate();
 
   return (
     <div className='tw-bg-white tw-flex tw-text-black tw-p-4 tw-justify-between'>

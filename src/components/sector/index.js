@@ -67,7 +67,6 @@ function Sectors({ selectedLever, leverObject }) {
   const [totalSegments, setTotalSegments] = useState(0);
   const dispatch = useDispatch();
   const selector = useSelector((state) => state.levers.sectorData);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const { data: leverData } = useGetSingleLever(selectedLever);
 
@@ -96,8 +95,6 @@ function Sectors({ selectedLever, leverObject }) {
     const defaultSelect = Object.keys(selectedSectorsData)[0];
     setSelectedSegment(defaultSelect);
     setTotalSegments(Object.keys(selectedSectorsData).length);
-    const isZeroItemSelected = selector.grandTotal === 0;
-    setIsButtonDisabled(isZeroItemSelected);
   }, [selectedSector]);
 
   const grandParentSelectedHandler = () => {
@@ -149,7 +146,7 @@ function Sectors({ selectedLever, leverObject }) {
 
       setGrandparentSelected((prev) => {
         const allObjects = { ...prev, ...obj };
-        console.log(Object.keys(allObjects));
+
         allObjects[Object.keys(allObjects)[0]] = 0;
         for (let index = 1; index < Object.keys(allObjects).length; index++) {
           allObjects[Object.keys(allObjects)[0]] +=
@@ -158,7 +155,7 @@ function Sectors({ selectedLever, leverObject }) {
         return allObjects;
       });
     }
-    console.log(grandParentSelected);
+
     if (!isSectorExist) {
       let obj = {
         totalSelected: !!grandParentSelected['totalSelected']
@@ -198,12 +195,8 @@ function Sectors({ selectedLever, leverObject }) {
     }
   };
 
-  // console.log(selector[selectedSector]);
   const childChangeHandler = ({ item, event, index }) => {
     event.preventDefault();
-    console.log('log segment', selectedSectorsData);
-    console.log('LeverData', leverData[0]['sector']);
-    console.log('Lever object', leverObject);
     const isSectorExist = grandParentSelected.hasOwnProperty(item['sector']);
 
     dispatch(
@@ -390,13 +383,6 @@ function Sectors({ selectedLever, leverObject }) {
             );
           })}
         </div>
-      </div>
-      <div className='tw-flex tw-justify-between tw-sticky tw-bottom-0 tw-bg-white tw-px-8 tw-py-4'>
-        <div className='tw-p-2 '>{`Total : ${selector?.grandTotal}`}</div>
-
-        <Button variant='contained' disabled={isButtonDisabled}>
-          Proced to add Project Info
-        </Button>
       </div>
     </>
   );

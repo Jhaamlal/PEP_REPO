@@ -106,7 +106,6 @@ const leversSclice = createSlice({
               'totalSegmentSelected'
             ];
         }
-        console.log('total', total);
         state.sectorData = { ...allSectorData, grandTotal: total };
       }
       grandTotal();
@@ -192,7 +191,6 @@ const leversSclice = createSlice({
               'totalSegmentSelected'
             ];
         }
-        console.log('total', total);
         state.sectorData = { ...allSectorData, grandTotal: total };
       }
       grandTotal();
@@ -203,7 +201,7 @@ const leversSclice = createSlice({
 
       const selectedSegment = selectedItem['segment'];
 
-      const allSectorData = { ...state.sectorData };
+      let allSectorData = { ...state.sectorData };
 
       const hasSegment =
         allSectorData[selectedSector].hasOwnProperty(selectedSegment);
@@ -269,8 +267,6 @@ const leversSclice = createSlice({
           segmentSelected: 1,
         };
 
-        console.log('error', allSectorData);
-
         allSectorData[selectedSector] = {
           ...allSectorData[selectedSector],
           totalSegmentSelected:
@@ -294,6 +290,7 @@ const leversSclice = createSlice({
       }
       grandTotal();
 
+      allSectorData = { ...state.sectorData };
       const isAllChildSelected =
         selectedSectorSegments[selectedSegment].length <=
         allSectorData[selectedSector][selectedSegment]['segmentSelected'];
