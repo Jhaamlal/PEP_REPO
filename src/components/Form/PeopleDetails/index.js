@@ -8,13 +8,8 @@ import {
 
 import React from 'react';
 
-const nameEmail = [
-  { name: 'ravi', emil: 'shankar' },
-  { name: 'rohit', emil: 'rohit' },
-  { name: 'sandeep', emil: 'sandeepk' },
-  { name: 'rohan', emil: 'srohanr@' },
-  { name: 'Jay', emil: 'jay@gmailcom' },
-];
+import { nameEmail } from '../../../utils/constant';
+
 function PepoleFormDetails({ peopleDetails, setPeopleDetails }) {
   return (
     <div className='tw-grid tw-grid-cols-6 tw-gap-y-4'>
@@ -44,7 +39,6 @@ function PepoleFormDetails({ peopleDetails, setPeopleDetails }) {
               multiple
               className='tw-w-[90%]'
               options={nameEmail}
-              // value={peopleDetails.colaborators}
               onChange={(_e, newValue) => {
                 setPeopleDetails((prev) => ({
                   ...prev,

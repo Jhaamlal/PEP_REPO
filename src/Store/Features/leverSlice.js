@@ -1,4 +1,12 @@
 import { createSlice, current } from '@reduxjs/toolkit';
+import {
+  createNewSegment,
+  getGrandParentSelection,
+  grandTotal,
+  hasContainChildElement,
+  setIntermideateState,
+  withoutChildElement,
+} from './utils';
 
 const initialState = {
   sectorData: {
@@ -58,28 +66,12 @@ const leversSclice = createSlice({
           allSectorData[selectedSector]['totalSegmentSelected'] +=
             selectedSectorsData[item].length;
         });
-
-        let obj2 = {};
-        for (
-          let index = 0;
-          index < Object.keys(selectedSectorsData).length;
-          index++
-        ) {
-          obj2[Object.keys(selectedSectorsData)[index]] = {
-            isChecked: true,
-            isIntermeideate: false,
-            selectedChild: [],
-            segmentSelected:
-              selectedSectorsData[Object.keys(selectedSectorsData)[index]]
-                .length,
-          };
-        }
-
+        let newSegment = createNewSegment({ selectedSectorsData });
         allSectorData[selectedSector] = {
           ...allSectorData[selectedSector],
           isChecked: true,
           isIntermeideate: false,
-          ...obj2,
+          ...newSegment,
         };
 
         Object.keys(selectedSectorsData).map((sectorKey, index) => {
@@ -92,34 +84,16 @@ const leversSclice = createSlice({
           return '';
         });
       }
-
-      // let total = allSectorData.grandTotal;
-      let total = 0;
-      function grandTotal() {
-        for (
-          let index = 0;
-          index < Object.keys(allSectorData).length - 1;
-          index++
-        ) {
-          total +=
-            allSectorData[Object.keys(allSectorData)[index]][
-              'totalSegmentSelected'
-            ];
-        }
-        state.sectorData = { ...allSectorData, grandTotal: total };
-      }
-      grandTotal();
+      state.sectorData = grandTotal({ allSectorData });
     },
 
     parentUpdate: (state, { payload }) => {
       const { selectedSectorSegments, selectedSegment, selectedSector } =
         payload;
       const allSectorData = { ...state.sectorData };
-
       const isSegmentExist =
         allSectorData[selectedSector].hasOwnProperty(selectedSegment);
 
-      // if existed means you want to remove it ,else you want to add that ,
       if (isSegmentExist) {
         const segmentSelected =
           allSectorData[selectedSector]?.[selectedSegment]['segmentSelected'];
@@ -149,29 +123,12 @@ const leversSclice = createSlice({
           return '';
         });
       }
-      let isChecked = 0;
-      let isUncheacked = 0;
-      let isGPSelected = false;
-      let isGPIntermidiate = false;
-      const allSectorKeys = Object.keys(selectedSectorSegments);
-      for (const key of allSectorKeys) {
-        const isKeyChecked = !!allSectorData[selectedSector]?.[key]?.isChecked;
-        if (isKeyChecked) {
-          isChecked += 1;
-        }
-        if (!isKeyChecked) {
-          isUncheacked += 1;
-        }
-      }
 
-      allSectorKeys.length === isChecked
-        ? (isGPSelected = true)
-        : (isGPIntermidiate = true);
-
-      if (isChecked === 0) {
-        isGPSelected = false;
-        isGPIntermidiate = false;
-      }
+      const { isGPSelected, isGPIntermidiate } = getGrandParentSelection({
+        selectedSectorSegments,
+        allSectorData,
+        selectedSector,
+      });
 
       allSectorData[selectedSector] = {
         ...allSectorData[selectedSector],
@@ -179,21 +136,7 @@ const leversSclice = createSlice({
         isIntermeideate: isGPIntermidiate,
       };
 
-      let total = 0;
-      function grandTotal() {
-        for (
-          let index = 0;
-          index < Object.keys(allSectorData).length - 1;
-          index++
-        ) {
-          total +=
-            allSectorData[Object.keys(allSectorData)[index]][
-              'totalSegmentSelected'
-            ];
-        }
-        state.sectorData = { ...allSectorData, grandTotal: total };
-      }
-      grandTotal();
+      state.sectorData = grandTotal({ allSectorData });
     },
 
     childUpdate: (state, { payload }) => {
@@ -213,38 +156,20 @@ const leversSclice = createSlice({
         ].selectedChild.includes(selectedItem['id']);
 
         if (!hasChild) {
-          allSectorData[selectedSector][selectedSegment] = {
-            ...allSectorData[selectedSector][selectedSegment],
-            ...allSectorData[selectedSector][selectedSegment][
-              'selectedChild'
-            ].push(selectedItem['id']),
-            segmentSelected:
-              allSectorData[selectedSector][selectedSegment][
-                'segmentSelected'
-              ] + 1,
-          };
-          allSectorData[selectedSector] = {
-            ...allSectorData[selectedSector],
-            totalSegmentSelected:
-              allSectorData[selectedSector]['totalSegmentSelected'] + 1,
-          };
+          allSectorData = hasContainChildElement({
+            allSectorData,
+            selectedItem,
+            selectedSector,
+            selectedSegment,
+          });
         }
         if (hasChild) {
-          allSectorData[selectedSector][selectedSegment] = {
-            ...allSectorData[selectedSector][selectedSegment],
-            selectedChild: allSectorData[selectedSector][selectedSegment][
-              'selectedChild'
-            ].filter((item) => item !== selectedItem['id']),
-            segmentSelected:
-              allSectorData[selectedSector][selectedSegment][
-                'segmentSelected'
-              ] - 1,
-          };
-          allSectorData[selectedSector] = {
-            ...allSectorData[selectedSector],
-            totalSegmentSelected:
-              allSectorData[selectedSector]['totalSegmentSelected'] - 1,
-          };
+          allSectorData = withoutChildElement({
+            allSectorData,
+            selectedItem,
+            selectedSector,
+            selectedSegment,
+          });
         }
       }
 
@@ -274,21 +199,7 @@ const leversSclice = createSlice({
         };
       }
 
-      let total = 0;
-      function grandTotal() {
-        for (
-          let index = 0;
-          index < Object.keys(allSectorData).length - 1;
-          index++
-        ) {
-          total +=
-            allSectorData[Object.keys(allSectorData)[index]][
-              'totalSegmentSelected'
-            ];
-        }
-        state.sectorData = { ...allSectorData, grandTotal: total };
-      }
-      grandTotal();
+      state.sectorData = grandTotal({ allSectorData });
 
       allSectorData = { ...state.sectorData };
       const isAllChildSelected =
@@ -297,32 +208,11 @@ const leversSclice = createSlice({
 
       // agar false hai
       if (!isAllChildSelected) {
-        allSectorData[selectedSector] = {
-          ...allSectorData[selectedSector],
-          isChecked: false,
-          isIntermeideate: true,
-        };
-        allSectorData[selectedSector][selectedSegment] = {
-          ...allSectorData[selectedSector][selectedSegment],
-          isChecked: false,
-          isIntermeideate: true,
-        };
-        const isAllRemove =
-          allSectorData[selectedSector][selectedSegment]['segmentSelected'] ===
-          0;
-
-        if (isAllRemove) {
-          allSectorData[selectedSector] = {
-            ...allSectorData[selectedSector],
-            isChecked: false,
-            isIntermeideate: false,
-          };
-          allSectorData[selectedSector][selectedSegment] = {
-            ...allSectorData[selectedSector][selectedSegment],
-            isChecked: false,
-            isIntermeideate: false,
-          };
-        }
+        allSectorData = setIntermideateState({
+          allSectorData,
+          selectedSector,
+          selectedSegment,
+        });
       }
       if (isAllChildSelected) {
         allSectorData[selectedSector] = {
