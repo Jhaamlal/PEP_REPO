@@ -1,4 +1,4 @@
-import { Button, Checkbox } from '@mui/material';
+import { Checkbox } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { useGetSingleLever } from 'api';
@@ -9,6 +9,7 @@ import {
   grandParentUpdate,
   parentUpdate,
 } from '../../Store/Features/leverSlice';
+import { sectoreData } from 'utils';
 
 // let x = {
 //   Agricultue: {
@@ -61,34 +62,13 @@ import {
 // };
 
 function Sectors({ selectedLever, leverObject }) {
-  const selectedSectorsData = {};
   const [selectedSegment, setSelectedSegment] = useState('');
-  const [grandParentSelected, setGrandparentSelected] = useState({});
   const [totalSegments, setTotalSegments] = useState(0);
   const dispatch = useDispatch();
   const selector = useSelector((state) => state.levers.sectorData);
 
   const { data: leverData } = useGetSingleLever(selectedLever);
-
-  leverData?.map((item, index) => {
-    const isKeyExist = selectedSectorsData.hasOwnProperty(item['segment']);
-    if (isKeyExist) {
-      const newObj = {
-        name: item['name'],
-        category: item['category'],
-        location: item['location'],
-        description: item['description'],
-        id: item['uuid'],
-        sector: item['sector'],
-        segment: item['segment'],
-      };
-      selectedSectorsData[item['segment']].push(newObj);
-    }
-    if (!isKeyExist) {
-      selectedSectorsData[item['segment']] = [];
-    }
-  });
-
+  const selectedSectorsData = sectoreData({ leverData });
   const selectedSector = leverData?.[0]?.['sector'];
 
   useEffect(() => {
@@ -119,86 +99,10 @@ function Sectors({ selectedLever, leverObject }) {
         selectedSector: leverData[0]['sector'],
       }),
     );
-
-    // agar nahi hai
-    let obj = { ...grandParentSelected };
-    const isSectorExist = grandParentSelected.hasOwnProperty(
-      leverData[0]['sector'],
-    );
-    if (isSectorExist) {
-      obj[leverData[0]['sector']] = {
-        ...obj[leverData[0]['sector']],
-        [item]: {
-          isChecked: true,
-          isIntermeideate: false,
-          segmentSelected: 0,
-          selectedChild: [],
-        },
-      };
-
-      selectedSectorsData[item].map((item1, index) => {
-        obj[leverData[0]['sector']][item1['segment']]['selectedChild'].push(
-          item1.id,
-        );
-        obj[leverData[0]['sector']][item1['segment']]['segmentSelected'] += 1;
-        obj[leverData[0]['sector']]['totalSegmentSelected'] += 1;
-      });
-
-      setGrandparentSelected((prev) => {
-        const allObjects = { ...prev, ...obj };
-
-        allObjects[Object.keys(allObjects)[0]] = 0;
-        for (let index = 1; index < Object.keys(allObjects).length; index++) {
-          allObjects[Object.keys(allObjects)[0]] +=
-            allObjects[Object.keys(allObjects)[index]]['totalSegmentSelected'];
-        }
-        return allObjects;
-      });
-    }
-
-    if (!isSectorExist) {
-      let obj = {
-        totalSelected: !!grandParentSelected['totalSelected']
-          ? grandParentSelected['totalSelected']
-          : 0,
-      };
-      obj[leverData[0]['sector']] = {
-        isChecked: false,
-        isIntermeideate: true,
-        totalSegmentSelected: 0,
-        [item]: {
-          isChecked: true,
-          isIntermeideate: false,
-          segmentSelected: 0,
-          selectedChild: [],
-        },
-      };
-
-      selectedSectorsData[item].map((item1, index) => {
-        obj[leverData[0]['sector']][item1['segment']]['selectedChild'].push(
-          item1.id,
-        );
-        obj[leverData[0]['sector']][item1['segment']]['segmentSelected'] += 1;
-        obj[leverData[0]['sector']]['totalSegmentSelected'] += 1;
-      });
-
-      setGrandparentSelected((prev) => {
-        const allObjects = { ...prev, ...obj };
-        Object.keys(allObjects);
-        allObjects[Object.keys(allObjects)[0]] = 0;
-        for (let index = 1; index < Object.keys(allObjects).length; index++) {
-          allObjects[Object.keys(allObjects)[0]] +=
-            allObjects[Object.keys(allObjects)[index]]['totalSegmentSelected'];
-        }
-        return allObjects;
-      });
-    }
   };
 
   const childChangeHandler = ({ item, event, index }) => {
     event.preventDefault();
-    const isSectorExist = grandParentSelected.hasOwnProperty(item['sector']);
-
     dispatch(
       childUpdate({
         selectedSectorSegments: selectedSectorsData,
@@ -206,103 +110,6 @@ function Sectors({ selectedLever, leverObject }) {
         selectedSector: leverData[0]['sector'],
       }),
     );
-
-    if (!isSectorExist) {
-      let obj = {
-        totalSelected: 0,
-      };
-
-      obj[leverData[0]['sector']] = {
-        isChecked: true,
-        isIntermeideate: true,
-        totalSegmentSelected: 0,
-      };
-    }
-
-    // if (!isSectorExist) {
-    //   const sectorObj = {};
-    //   sectorObj[item['sector']] = {};
-    //   sectorObj[item['sector']][item['segment']] = [];
-    //   sectorObj[item['sector']][item['segment']].push(item['id']);
-
-    //   setChildSelected((prev) => {
-    //     return { ...prev, ...sectorObj };
-    //   });
-    // }
-    // if (isSectorExist) {
-    //   const isSegmentExist = childSelected[item['sector']].hasOwnProperty(
-    //     item['segment'],
-    //   );
-    //   if (!isSegmentExist) {
-    //     childSelected[item['sector']][item['segment']] = [];
-    //     childSelected[item['sector']][item['segment']].push(item['id']);
-    //     setChildSelected((prev) => {
-    //       return { ...prev };
-    //     });
-    //   }
-    //   if (isSegmentExist) {
-    //     const idExist = childSelected[item['sector']][item['segment']].includes(
-    //       item['id'],
-    //     );
-    //     if (idExist) {
-    //       childSelected[item['sector']][item['segment']] = childSelected[
-    //         item['sector']
-    //       ][item['segment']].filter((id) => id !== item['id']);
-    //       setChildSelected((prev) => {
-    //         return { ...prev };
-    //       });
-    //     }
-    //     if (!idExist) {
-    //       childSelected[item['sector']][item['segment']].push(item['id']);
-    //       setChildSelected((prev) => {
-    //         return { ...prev };
-    //       });
-    //     }
-    //   }
-    // if nahi
-    // if (!isSectorExist) {
-    //   const sectorObj = {};
-    //   sectorObj[item['sector']] = {};
-    //   sectorObj[item['sector']][item['segment']] = [];
-    //   sectorObj[item['sector']][item['segment']].push(item['id']);
-
-    //   setChildSelected((prev) => {
-    //     return { ...prev, ...sectorObj };
-    //   });
-    // }
-    // if (isSectorExist) {
-    //   const isSegmentExist = childSelected[item['sector']].hasOwnProperty(
-    //     item['segment'],
-    //   );
-    //   if (!isSegmentExist) {
-    //     childSelected[item['sector']][item['segment']] = [];
-    //     childSelected[item['sector']][item['segment']].push(item['id']);
-    //     setChildSelected((prev) => {
-    //       return { ...prev };
-    //     });
-    //   }
-    //   if (isSegmentExist) {
-    //     const idExist = childSelected[item['sector']][item['segment']].includes(
-    //       item['id'],
-    //     );
-    //     if (idExist) {
-    //       childSelected[item['sector']][item['segment']] = childSelected[
-    //         item['sector']
-    //       ][item['segment']].filter((id) => id !== item['id']);
-    //       setChildSelected((prev) => {
-    //         return { ...prev };
-    //       });
-    //     }
-    //     if (!idExist) {
-    //       childSelected[item['sector']][item['segment']].push(item['id']);
-    //       setChildSelected((prev) => {
-    //         return { ...prev };
-    //       });
-    //     }
-    //   }
-    // }
-
-    return;
   };
   return (
     <>

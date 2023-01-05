@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { logo } from 'utils/constant';
 
-let logo =
-  'https://thumbs.dreamstime.com/b/teamwork-community-logo-design-vector-adoption-social-network-template-156215000.jpg';
 function Header() {
   let headers = ['Home', 'Lever', 'My Project'];
   const [selectedItem, setSelectedItem] = useState('Home');

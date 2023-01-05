@@ -61,3 +61,60 @@ export const validateProperty = ({ event, BasicDetailSchema }) => {
   const { error } = result;
   return error ? error.details[0].message : null;
 };
+
+export const sectoreData = ({ leverData }) => {
+  const selectedSectorsData = {};
+  leverData?.map((item, index) => {
+    const isKeyExist = selectedSectorsData.hasOwnProperty(item['segment']);
+    if (isKeyExist) {
+      const newObj = {
+        name: item['name'],
+        category: item['category'],
+        location: item['location'],
+        description: item['description'],
+        id: item['uuid'],
+        sector: item['sector'],
+        segment: item['segment'],
+      };
+      selectedSectorsData[item['segment']].push(newObj);
+    }
+    if (!isKeyExist) {
+      selectedSectorsData[item['segment']] = [];
+    }
+  });
+
+  return selectedSectorsData;
+};
+
+export const allSectoresData = ({ levers }) => {
+  const leverObject = {};
+  levers?.map((item, index) => {
+    const isSectorExist = leverObject.hasOwnProperty(item['sector']);
+
+    if (isSectorExist) {
+      const isSegemntExist = leverObject?.[item['sector']]?.hasOwnProperty(
+        item['segment'],
+      );
+      if (isSegemntExist) {
+        leverObject[item['sector']]['total'] += 1;
+        leverObject[item['sector']][item['segment']] += 1;
+      }
+      if (!isSegemntExist) {
+        leverObject[item['sector']] = {
+          ...leverObject[item['sector']],
+          [item['segment']]: 0,
+        };
+      }
+    } else {
+      leverObject[item['sector']] = {
+        total: 0,
+        [item['segment']]: 0,
+      };
+    }
+    return '';
+  });
+  delete leverObject['DuMmY'];
+  delete leverObject['Test'];
+
+  return leverObject;
+};
