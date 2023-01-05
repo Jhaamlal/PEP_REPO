@@ -13,12 +13,9 @@ const myRegexPattern = new RegExp(/^.*[<>{}].*$/s);
 export const chargeCodeSchema = Joi.object({
   field: Joi.string()
     .custom((value, helpers) => {
-      // if true Joi will be throw an error with code "any.invalid"
-      // The "code" NOT a "message" error
       return myRegexPattern.test(value) ? helpers.error('any.invalid') : value;
     })
     .messages({
-      // errorCode: errorMessage
       'any.invalid': "Whooaaa! That's a Bad String",
     }),
 });

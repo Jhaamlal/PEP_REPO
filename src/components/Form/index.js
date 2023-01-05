@@ -1,6 +1,7 @@
 import { Button } from '@mui/material';
 import { ModalComponent } from 'components/ui/Modal';
 import React, { useEffect, useState } from 'react';
+import { formValid } from 'utils';
 import { Basic } from './BasicDetails';
 import { ChargeCode } from './ChargeCode';
 import { PepoleFormDetails } from './PeopleDetails';
@@ -37,57 +38,8 @@ function ProjectForm() {
     peopleDetails: false,
   });
 
-  const formValid = () => {
-    for (const key in basicDetails) {
-      const isValueAllExist = basicDetails[key].length >= 4;
-      if (!isValueAllExist) {
-        setIsFormValid((prev) => ({
-          ...prev,
-          basicDetails: false,
-        }));
-        break;
-      } else {
-        setIsFormValid((prev) => ({
-          ...prev,
-          basicDetails: true,
-        }));
-      }
-    }
-    for (const key in peopleDetails) {
-      const isValueAllExist = peopleDetails[key].length >= 1;
-      if (key === 'director') {
-        const isValueAllExist =
-          !!peopleDetails['director']?.['name']?.length >= 1;
-        if (!isValueAllExist) {
-          setIsFormValid((prev) => ({
-            ...prev,
-            peopleDetails: false,
-          }));
-          break;
-        } else {
-          setIsFormValid((prev) => ({
-            ...prev,
-            peopleDetails: true,
-          }));
-        }
-      } else {
-        if (!isValueAllExist) {
-          setIsFormValid((prev) => ({
-            ...prev,
-            peopleDetails: false,
-          }));
-          break;
-        } else {
-          setIsFormValid((prev) => ({
-            ...prev,
-            peopleDetails: true,
-          }));
-        }
-      }
-    }
-  };
   useEffect(() => {
-    formValid();
+    formValid({ basicDetails, peopleDetails, setIsFormValid });
   }, [peopleDetails, basicDetails]);
 
   const isReadyToSubmit =
@@ -96,12 +48,10 @@ function ProjectForm() {
   return (
     <div className=' tw-bg-white'>
       <h1>Project Info</h1>
-
       <div className='tw-my-8'>
         <Basic
           setBasicDetails={setBasicDetails}
           basicDetails={setBasicDetails}
-          // error={isBasicValid}
         />
       </div>
       <div className='tw-my-8'>

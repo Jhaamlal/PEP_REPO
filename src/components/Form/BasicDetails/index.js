@@ -1,12 +1,11 @@
 import { InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-
-import Joi from 'joi';
-
 import React, { useState } from 'react';
-import { BasicDetailSchema } from '../Schema';
-let todays = new Date().toISOString().split('T')[0];
+import { validateProperty } from 'utils';
 
+import { BasicDetailSchema } from '../Schema';
+
+let todays = new Date().toISOString().split('T')[0];
 function Basic({ basicDetails, setBasicDetails, error }) {
   const [startDate, setStartDate] = useState(todays);
   const [endtDate, setEndtDate] = useState(todays);
@@ -16,7 +15,6 @@ function Basic({ basicDetails, setBasicDetails, error }) {
     const changeFormate = `${newValue['$y']}-${newValue['$M'] + 1}-${
       newValue['$D']
     }`;
-
     setBasicDetails((prev) => {
       return { ...prev, startDate: changeFormate };
     });
@@ -33,7 +31,7 @@ function Basic({ basicDetails, setBasicDetails, error }) {
   const handleSave = (event) => {
     const { name, value } = event.target;
     let errorData = { ...errors };
-    const errorMessage = validateProperty(event);
+    const errorMessage = validateProperty({ event, BasicDetailSchema });
     if (errorMessage) {
       errorData[name] = errorMessage;
     } else {
@@ -45,14 +43,6 @@ function Basic({ basicDetails, setBasicDetails, error }) {
       return { ...prev, ...customerData };
     });
     setErrors(errorData);
-  };
-  const validateProperty = (event) => {
-    const { name, value } = event.target;
-    const obj = { [name]: value };
-    const subSchema = Joi.object({ [name]: BasicDetailSchema[name] });
-    const result = subSchema.validate(obj);
-    const { error } = result;
-    return error ? error.details[0].message : null;
   };
 
   return (
