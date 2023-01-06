@@ -37,7 +37,9 @@ export const getGrandParentSelection = ({
   let isGPIntermidiate = false;
   const allSectorKeys = Object.keys(selectedSectorSegments);
   for (const key of allSectorKeys) {
-    const isKeyChecked = !!allSectorData[selectedSector]?.[key]?.isChecked;
+    const isKeyChecked =
+      !!allSectorData[selectedSector]?.[key]?.isChecked ||
+      !!allSectorData[selectedSector]?.[key]?.isIntermeideate;
     if (isKeyChecked) {
       isChecked += 1;
     }

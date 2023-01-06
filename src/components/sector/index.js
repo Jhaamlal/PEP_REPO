@@ -139,9 +139,7 @@ function Sectors({ selectedLever, leverObject }) {
           {Object.keys(selectedSectorsData).map((item, index) => {
             return (
               <div
-                className={`tw-ml-2 tw-flex tw-justify-between ${
-                  selectedSegment === item && 'tw-bg-blue-200'
-                }`}
+                className={`tw-ml-2 tw-flex tw-justify-between active:tw-bg-blue-200`}
                 key={index}
               >
                 <FormControlLabel
