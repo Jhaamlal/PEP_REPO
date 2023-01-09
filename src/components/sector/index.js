@@ -11,56 +11,6 @@ import {
 } from '../../Store/Features/leverSlice';
 import { sectoreData } from 'utils';
 
-// let x = {
-//   Agricultue: {
-//     segemet1: {
-//       isChecked: true, //selected child is true if  total segmentSelected sector wale se mile
-//       isIntermeideate: true, // is total selected is less then total segment selected
-//       totalSegmentSelected: 108, // length of child selected
-//       selectedChild: [],
-//     },
-//     segent2: {
-//       isChecked: true,
-//       isIntermeideate: true,
-//       totalSegmentSelected: 108,
-//       selectedChild: [],
-//     },
-//     segment3: {
-//       isChecked: true,
-//       isIntermeideate: true,
-//       totalSegmentSelected: 108,
-//       selectedChild: [],
-//     },
-//     isChecked: true,
-//     isIntermeideate: true,
-//     totalSegmentSelected: 108,
-//   },
-//   Industry: {
-//     segemet1: {
-//       isChecked: true, //selected child is true if  total segmentSelected sector wale se mile
-//       isIntermeideate: true, // is total selected is less then total segment selected
-//       totalSegmentSelected: 108, // length of child selected
-//       selectedChild: [],
-//     },
-//     segent2: {
-//       isChecked: true,
-//       isIntermeideate: true,
-//       totalSegmentSelected: 108,
-//       selectedChild: [],
-//     },
-//     segment3: {
-//       isChecked: true,
-//       isIntermeideate: true,
-//       totalSegmentSelected: 108,
-//       selectedChild: [],
-//     },
-//     isChecked: true,
-//     isIntermeideate: true,
-//     totalSegmentSelected: 108,
-//   },
-//   total: 0,
-// };
-
 function Sectors({ selectedLever, leverObject }) {
   const [selectedSegment, setSelectedSegment] = useState('');
   const [totalSegments, setTotalSegments] = useState(0);

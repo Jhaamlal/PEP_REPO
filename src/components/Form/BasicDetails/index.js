@@ -28,6 +28,18 @@ function Basic({ basicDetails, setBasicDetails, error }) {
     });
   };
 
+  // const handleDates = ({ newValue, type }) => {
+  //   const changeFormate = `${newValue['$y']}-${newValue['$M'] + 1}-${
+  //     newValue['$D']
+  //   }`;
+
+  //   let yZ=type.toString()
+
+  //   setBasicDetails((prev) => {
+  //     return { ...prev, yZ: changeFormate };
+  //   });
+  // };
+
   const handleSave = (event) => {
     const { name, value } = event.target;
     let errorData = { ...errors };
@@ -107,6 +119,7 @@ function Basic({ basicDetails, setBasicDetails, error }) {
               onChange={(newValue) => {
                 setStartDate(newValue);
                 handleStartData(newValue);
+                // handleDates({ newValue, type: 'startDate' });
               }}
               renderInput={(params) => <TextField {...params} />}
             />
@@ -122,6 +135,7 @@ function Basic({ basicDetails, setBasicDetails, error }) {
               onChange={(newValue) => {
                 setEndtDate(newValue);
                 handleEndData(newValue);
+                // handleDates({ newValue, type: 'endtDate' });
               }}
               renderInput={(params) => <TextField {...params} />}
             />

@@ -10,9 +10,10 @@ export const useGetLevers = (config) =>
 
 export const useGetSingleLever = (sector, config) =>
   useFetch(
-    pathToUrl(apiRoutes.getSigleLever, {
-      sector,
-    }),
+    pathToUrl(apiRoutes.getAllLevers),
+    {
+      sector: sector,
+    },
     undefined,
     { staleTime: Infinity, ...config },
   );

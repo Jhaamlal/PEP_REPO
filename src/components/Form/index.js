@@ -16,6 +16,7 @@ function ProjectForm() {
     descriptions: '',
   });
 
+  console.log(basicDetails);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
