@@ -206,6 +206,12 @@ const leversSclice = createSlice({
         selectedSectorSegments[selectedSegment].length <=
         allSectorData[selectedSector][selectedSegment]['segmentSelected'];
 
+      const { isGPSelected, isGPIntermidiate } = getGrandParentSelection({
+        selectedSectorSegments,
+        allSectorData,
+        selectedSector,
+      });
+
       // agar false hai
       if (!isAllChildSelected) {
         allSectorData = setIntermideateState({
@@ -215,11 +221,21 @@ const leversSclice = createSlice({
         });
       }
       if (isAllChildSelected) {
-        allSectorData[selectedSector] = {
-          ...allSectorData[selectedSector],
-          isChecked: true,
-          isIntermeideate: false,
-        };
+        if (isGPSelected) {
+          allSectorData[selectedSector] = {
+            ...allSectorData[selectedSector],
+            isChecked: true,
+            isIntermeideate: false,
+          };
+        }
+        if (!isGPSelected) {
+          allSectorData[selectedSector] = {
+            ...allSectorData[selectedSector],
+            isChecked: false,
+            isIntermeideate: true,
+          };
+        }
+
         allSectorData[selectedSector][selectedSegment] = {
           ...allSectorData[selectedSector][selectedSegment],
           isChecked: true,
