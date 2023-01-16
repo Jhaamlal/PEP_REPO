@@ -67,6 +67,9 @@ function Sectors({ selectedLever, leverObject }) {
       }),
     );
   };
+  const isGrandParentChecked = !!selector[selectedSector]?.['isChecked'];
+  const isGrandParentIndeterminate =
+    !!selector[selectedSector]?.['isIntermeideate'];
   return (
     <>
       <div className='tw-grid tw-grid-cols-6 tw-h-96 tw-gap-4 tw-mt-8 tw-mx-4'>
@@ -77,16 +80,17 @@ function Sectors({ selectedLever, leverObject }) {
               label={'SelectAll'}
               control={
                 <Checkbox
-                  checked={!!selector[selectedSector]?.['isChecked']}
-                  indeterminate={
-                    !!selector[selectedSector]?.['isIntermeideate']
-                  }
+                  checked={isGrandParentChecked}
+                  indeterminate={isGrandParentIndeterminate}
                   onChange={grandParentSelectedHandler}
                 />
               }
             />
           </div>
           {Object.keys(selectedSectorsData).map((item, index) => {
+            const isChecked = !!selector[selectedSector]?.[item]?.['isChecked'];
+            const isInterMediate =
+              !!selector[selectedSector]?.[item]?.['isIntermeideate'];
             return (
               <div
                 className={`tw-ml-2 tw-flex tw-justify-between active:tw-bg-blue-200`}
@@ -96,12 +100,8 @@ function Sectors({ selectedLever, leverObject }) {
                   label={item}
                   control={
                     <Checkbox
-                      checked={
-                        !!selector[selectedSector]?.[item]?.['isChecked']
-                      }
-                      indeterminate={
-                        !!selector[selectedSector]?.[item]?.['isIntermeideate']
-                      }
+                      checked={isChecked}
+                      indeterminate={isInterMediate}
                     />
                   }
                   onClick={(event) =>

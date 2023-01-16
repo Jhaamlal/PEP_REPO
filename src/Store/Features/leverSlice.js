@@ -1,5 +1,6 @@
 import { createSlice, current } from '@reduxjs/toolkit';
 import {
+  addSegmentChild,
   createNewSegment,
   getGrandParentSelection,
   grandTotal,
@@ -38,6 +39,11 @@ const initialState = {
     grandTotal: 0,
   },
 };
+const initialParentObj = {
+  isChecked: false,
+  isIntermeideate: false,
+  totalSegmentSelected: 0,
+};
 
 const leversSclice = createSlice({
   name: 'assumptions',
@@ -54,9 +60,7 @@ const leversSclice = createSlice({
         allSectorData = {
           ...allSectorData,
           [selectedSector]: {
-            isChecked: false,
-            isIntermeideate: false,
-            totalSegmentSelected: 0,
+            ...initialParentObj,
           },
         };
       }
@@ -90,7 +94,7 @@ const leversSclice = createSlice({
     parentUpdate: (state, { payload }) => {
       const { selectedSectorSegments, selectedSegment, selectedSector } =
         payload;
-      const allSectorData = { ...state.sectorData };
+      let allSectorData = { ...state.sectorData };
       const isSegmentExist =
         allSectorData[selectedSector].hasOwnProperty(selectedSegment);
 
@@ -112,15 +116,11 @@ const leversSclice = createSlice({
             selectedChild: [],
           },
         };
-        selectedSectorSegments[selectedSegment].map((item1, index) => {
-          allSectorData[selectedSector][selectedSegment]['selectedChild'].push(
-            item1.id,
-          );
-          allSectorData[selectedSector][selectedSegment][
-            'segmentSelected'
-          ] += 1;
-          allSectorData[selectedSector]['totalSegmentSelected'] += 1;
-          return '';
+        allSectorData = addSegmentChild({
+          selectedSectorSegments,
+          selectedSegment,
+          selectedSector,
+          allSectorData,
         });
       }
 

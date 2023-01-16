@@ -139,3 +139,20 @@ export const withoutChildElement = ({
 
   return { ...allSectorData };
 };
+
+export const addSegmentChild = ({
+  selectedSegment,
+  selectedSectorSegments,
+  selectedSector,
+  allSectorData,
+}) => {
+  selectedSectorSegments[selectedSegment].map((item1, index) => {
+    allSectorData[selectedSector][selectedSegment]['selectedChild'].push(
+      item1.id,
+    );
+    allSectorData[selectedSector][selectedSegment]['segmentSelected'] += 1;
+    allSectorData[selectedSector]['totalSegmentSelected'] += 1;
+    return '';
+  });
+  return allSectorData;
+};
