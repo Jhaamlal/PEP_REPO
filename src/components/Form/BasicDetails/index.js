@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { validateProperty } from 'utils';
 
 import { BasicDetailSchema } from '../Schema';
+import { ProjectName } from 'components/ui';
 
 let todays = new Date().toISOString().split('T')[0];
 function Basic({ basicDetails, setBasicDetails, error }) {
@@ -59,20 +60,18 @@ function Basic({ basicDetails, setBasicDetails, error }) {
 
   return (
     <div className='tw-grid tw-grid-cols-6 tw-gap-y-4 '>
-      <div className='tw-col-span-3 '>Basic Details</div>
-      <div className='tw-col-span-3'>
+      <ProjectName name={'Basic Details'} />
+      <div className='tw-col-span-4'>
         {/* Basic part 1 */}
-        <div className='tw-grid tw-grid-cols-2 tw-gap-4'>
-          <div className='tw-col-span-1 '>
+        <div className='tw-grid tw-grid-cols-4 tw-gap-4'>
+          <div className='tw-col-span-2 '>
             <InputLabel id='demo-simple-select-label'>Project Name</InputLabel>
             <TextField
               className='tw-w-full'
               onChange={handleSave}
               name='projectName'
               value={basicDetails.projectName}
-              helperText='Please enter your name'
               id='demo-helper-text-aligned'
-              label='Name'
               inputProps={{ minLength: 3 }}
               required={true}
             />
@@ -82,7 +81,7 @@ function Basic({ basicDetails, setBasicDetails, error }) {
               </div>
             )}
           </div>
-          <div className='tw-col-span-1'>
+          <div className='tw-col-span-2'>
             <InputLabel id='demo-simple-select-label'>Project Type</InputLabel>
             <Select
               className='tw-w-full '
@@ -107,13 +106,14 @@ function Basic({ basicDetails, setBasicDetails, error }) {
           </div>
         </div>
         {/* Basic 2 */}
-        <div className='tw-grid tw-grid-cols-2 '>
-          <div className='tw-col-span-1 '>
+        <div className='tw-grid tw-grid-cols-4 tw-gap-y-4 tw-my-4'>
+          <div className='tw-col-span-2 '>
             <InputLabel id='demo-simple-select-label'>
               Project Start date
             </InputLabel>
             <DatePicker
               value={startDate}
+              className='tw-w-[33rem]'
               disablePast={true}
               required={true}
               onChange={(newValue) => {
@@ -124,12 +124,13 @@ function Basic({ basicDetails, setBasicDetails, error }) {
               renderInput={(params) => <TextField {...params} />}
             />
           </div>
-          <div className='tw-col-span-1'>
+          <div className='tw-col-span-2'>
             <InputLabel id='demo-simple-select-label'>
               Project End date
             </InputLabel>
             <DatePicker
               value={endtDate}
+              className='tw-w-[33rem]'
               disablePast={true}
               required={true}
               onChange={(newValue) => {
@@ -142,7 +143,7 @@ function Basic({ basicDetails, setBasicDetails, error }) {
           </div>
         </div>
         {/* Basic part 3 */}
-        <div className='tw-col-span-1'>
+        <div className='tw-col-span-2'>
           <InputLabel id='Form Id'>Description</InputLabel>
           <TextField
             className='tw-w-[80%]'

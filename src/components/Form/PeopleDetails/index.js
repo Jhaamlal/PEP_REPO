@@ -9,20 +9,20 @@ import {
 import React from 'react';
 
 import { nameEmail } from '../../../utils/constant';
+import { ProjectName } from 'components/ui';
 
 function PepoleFormDetails({ peopleDetails, setPeopleDetails }) {
   return (
     <div className='tw-grid tw-grid-cols-6 tw-gap-y-4'>
-      <div className='tw-col-span-3 '>Project</div>
-      <div className='tw-col-span-3'>
+      <ProjectName name={'Project'} />
+      <div className='tw-col-span-4'>
         {/* Basic part 1 */}
-        <div className='tw-grid tw-grid-cols-2 tw-gap-4'>
+        <div className='tw-grid tw-grid-cols-2 tw-gap-4 tw-mb-5'>
           <div className='tw-col-span-1 '>
             <InputLabel id='client Name'>Client naame</InputLabel>
             <TextField
               className='tw-w-[90%]'
               id='demo-helper-text-aligned'
-              label='Name'
               value={peopleDetails.clientName}
               required={true}
               onChange={(e) => {

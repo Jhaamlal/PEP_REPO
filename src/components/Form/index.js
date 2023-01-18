@@ -16,7 +16,6 @@ function ProjectForm() {
     descriptions: '',
   });
 
-  console.log(basicDetails);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -24,7 +23,7 @@ function ProjectForm() {
   const [chargeCode, setChargeCode] = useState({
     value: '',
     errorMessage: '',
-    error: true,
+    error: false,
   });
 
   const [peopleDetails, setPeopleDetails] = useState({
@@ -47,7 +46,7 @@ function ProjectForm() {
     isFormValid.basicDetails && isFormValid.peopleDetails && chargeCode.error;
 
   return (
-    <div className=' tw-bg-white'>
+    <div className=' tw-bg-white tw-px-8 '>
       <h1>Project Info</h1>
       <div className='tw-my-8'>
         <Basic
@@ -55,13 +54,14 @@ function ProjectForm() {
           basicDetails={setBasicDetails}
         />
       </div>
+      <hr className='tw-h-8 tw-min-w-full tw-col-span-6'></hr>
       <div className='tw-my-8'>
         <PepoleFormDetails
           peopleDetails={peopleDetails}
           setPeopleDetails={setPeopleDetails}
         />
       </div>
-
+      <hr className='tw-h-8 tw-min-w-full tw-col-span-6'></hr>
       <ModalComponent open={open} handleClose={handleClose} />
 
       <ChargeCode chargeCode={chargeCode} setChargeCode={setChargeCode} />

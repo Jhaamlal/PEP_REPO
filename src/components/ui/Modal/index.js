@@ -3,6 +3,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const style = {
   position: 'absolute',
@@ -17,6 +18,10 @@ const style = {
 };
 
 function ModalComponent({ open, handleClose }) {
+  const navigation = useNavigate();
+  const leaveHandler = () => {
+    navigation('/');
+  };
   return (
     <div>
       <Modal
@@ -34,7 +39,11 @@ function ModalComponent({ open, handleClose }) {
           </Typography>
           <Button />
           <div className='tw-flex tw-justify-end '>
-            <Button variant='outlined' sx={{ marginRight: 2 }}>
+            <Button
+              variant='outlined'
+              sx={{ marginRight: 2 }}
+              onClick={leaveHandler}
+            >
               Leave
             </Button>
             <Button variant='contained'>Stay</Button>
