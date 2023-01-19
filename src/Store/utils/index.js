@@ -16,7 +16,7 @@ export const createNewSegment = ({ selectedSectorsData }) => {
   ) {
     obj2[Object.keys(selectedSectorsData)[index]] = {
       isChecked: true,
-      isIntermeideate: false,
+      intermediate: false,
       selectedChild: [],
       segmentSelected:
         selectedSectorsData[Object.keys(selectedSectorsData)[index]].length,
@@ -39,7 +39,7 @@ export const getGrandParentSelection = ({
   for (const key of allSectorKeys) {
     const isKeyChecked =
       !!allSectorData[selectedSector]?.[key]?.isChecked ||
-      !!allSectorData[selectedSector]?.[key]?.isIntermeideate;
+      !!allSectorData[selectedSector]?.[key]?.intermediate;
     if (isKeyChecked) {
       isChecked += 1;
     }
@@ -60,7 +60,7 @@ export const getGrandParentSelection = ({
   return { isGPSelected, isGPIntermidiate };
 };
 
-export const setIntermideateState = ({
+export const setIntermediate = ({
   allSectorData,
   selectedSector,
   selectedSegment,
@@ -68,12 +68,12 @@ export const setIntermideateState = ({
   allSectorData[selectedSector] = {
     ...allSectorData[selectedSector],
     isChecked: false,
-    isIntermeideate: true,
+    intermediate: true,
   };
   allSectorData[selectedSector][selectedSegment] = {
     ...allSectorData[selectedSector][selectedSegment],
     isChecked: false,
-    isIntermeideate: true,
+    intermediate: true,
   };
   const isAllRemove =
     allSectorData[selectedSector][selectedSegment]['segmentSelected'] === 0;
@@ -82,12 +82,12 @@ export const setIntermideateState = ({
     allSectorData[selectedSector] = {
       ...allSectorData[selectedSector],
       isChecked: false,
-      isIntermeideate: false,
+      intermediate: false,
     };
     allSectorData[selectedSector][selectedSegment] = {
       ...allSectorData[selectedSector][selectedSegment],
       isChecked: false,
-      isIntermeideate: false,
+      intermediate: false,
     };
   }
 

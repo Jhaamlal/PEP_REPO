@@ -2,7 +2,7 @@ import { ProjectForm } from 'components';
 import { Home } from 'container/Home';
 import React from 'react';
 
-function FormComponent() {
+function Form() {
   return (
     <div>
       <Home />
@@ -11,4 +11,4 @@ function FormComponent() {
   );
 }
 
-export { FormComponent };
+export { Form };

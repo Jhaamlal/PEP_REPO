@@ -62,7 +62,7 @@ export const validateProperty = ({ event, BasicDetailSchema }) => {
   return error ? error.details[0].message : null;
 };
 
-export const sectoreData = ({ leverData }) => {
+export const sectorsData = ({ leverData }) => {
   const selectedSectorsData = {};
   leverData?.map((item, index) => {
     const isKeyExist = selectedSectorsData.hasOwnProperty(item['segment']);
@@ -86,7 +86,7 @@ export const sectoreData = ({ leverData }) => {
   return selectedSectorsData;
 };
 
-export const allSectoresData = ({ levers }) => {
+export const allSectorsData = ({ levers }) => {
   const leverObject = {};
   levers?.map((item, index) => {
     const isSectorExist = leverObject.hasOwnProperty(item['sector']);

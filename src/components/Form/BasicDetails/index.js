@@ -3,13 +3,13 @@ import { DatePicker } from '@mui/x-date-pickers';
 import React, { useState } from 'react';
 import { validateProperty } from 'utils';
 
-import { BasicDetailSchema } from '../Schema';
+import { BasicDetailSchema } from '../schema';
 import { ProjectName } from 'components/ui';
 
 let todays = new Date().toISOString().split('T')[0];
 function Basic({ basicDetails, setBasicDetails, error }) {
   const [startDate, setStartDate] = useState(todays);
-  const [endtDate, setEndtDate] = useState(todays);
+  const [endDate, setEndDate] = useState(todays);
   const [errors, setErrors] = useState({});
 
   const handleStartData = (newValue) => {
@@ -129,12 +129,12 @@ function Basic({ basicDetails, setBasicDetails, error }) {
               Project End date
             </InputLabel>
             <DatePicker
-              value={endtDate}
+              value={endDate}
               className='tw-w-[33rem]'
               disablePast={true}
               required={true}
               onChange={(newValue) => {
-                setEndtDate(newValue);
+                setEndDate(newValue);
                 handleEndData(newValue);
                 // handleDates({ newValue, type: 'endtDate' });
               }}

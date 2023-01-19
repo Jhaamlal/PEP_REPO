@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { formValid } from 'utils';
 import { Basic } from './BasicDetails';
 import { ChargeCode } from './ChargeCode';
-import { PepoleFormDetails } from './PeopleDetails';
+import { PeopleFormDetails } from './PeopleDetails';
 
 let todays = new Date().toISOString().split('T')[0];
 function ProjectForm() {
@@ -28,7 +28,7 @@ function ProjectForm() {
 
   const [peopleDetails, setPeopleDetails] = useState({
     clientName: '',
-    colaborators: '',
+    collaborators: '',
     director: '',
     projectLead: '',
   });
@@ -56,7 +56,7 @@ function ProjectForm() {
       </div>
       <hr className='tw-h-8 tw-min-w-full tw-col-span-6'></hr>
       <div className='tw-my-8'>
-        <PepoleFormDetails
+        <PeopleFormDetails
           peopleDetails={peopleDetails}
           setPeopleDetails={setPeopleDetails}
         />
@@ -65,6 +65,7 @@ function ProjectForm() {
       <ModalComponent open={open} handleClose={handleClose} />
 
       <ChargeCode chargeCode={chargeCode} setChargeCode={setChargeCode} />
+
       <div className='tw-grid tw-grid-cols-6 tw-gap-y-4 tw-mt-8'>
         <hr className='tw-h-8 tw-min-w-full tw-col-span-6'></hr>
         <div className='tw-col-span-6 '>

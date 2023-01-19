@@ -1,45 +1,32 @@
 import { InputLabel, TextField } from '@mui/material';
 import { ProjectName } from 'components/ui';
 import React, { useState } from 'react';
+import { chargeCodeSchema } from '../schema';
 
 function ChargeCode({ chargeCode, setChargeCode }) {
   const handleChargeCodeChange = (e) => {
-    let specialChar = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-    const isContainSpecialCharecter = specialChar.test(e.target.value);
+    const item = chargeCodeSchema.validate({ field: e.target.value });
+    const { error } = item;
 
-    if (!isContainSpecialCharecter) {
-      setChargeCode({
+    if (!!error) {
+      setChargeCode((prev) => ({
         value: e.target.value,
-        errorMessage: '',
-        error: false,
-      });
-    }
-    if (isContainSpecialCharecter) {
-      setChargeCode((prev) => ({
-        ...prev,
-        errorMessage: 'Special charecter are not allowed ',
+        errorMessage: error?.message,
         error: false,
       }));
     }
-    const totalLength = e.target.value.length < 6;
-    if (totalLength) {
+    if (!error) {
       setChargeCode((prev) => ({
-        ...prev,
-        errorMessage: 'At least 6 charecter',
-        error: false,
-      }));
-    }
-    if (!totalLength) {
-      setChargeCode((prev) => ({
-        ...prev,
+        value: e.target.value,
         errorMessage: '',
         error: true,
       }));
     }
   };
+
   return (
     <div className='tw-grid tw-grid-cols-6 tw-gap-y-4 tw-mt-8'>
-      <ProjectName name={'Acesss'} />
+      <ProjectName name={'Access'} />
       <div className='tw-col-span-4'>
         {/* Basic part 1-2 */}
         <div className='tw-grid tw-grid-cols-2 tw-gap-4'>
@@ -53,7 +40,6 @@ function ChargeCode({ chargeCode, setChargeCode }) {
                 className='tw-w-[50%]'
                 onChange={handleChargeCodeChange}
                 helperText={chargeCode.errorMessage} // error message
-                // error={chargeCode.error}
                 inputProps={{ maxLength: 6 }}
               />
             </div>

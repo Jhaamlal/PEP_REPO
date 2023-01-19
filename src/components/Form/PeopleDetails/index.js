@@ -11,7 +11,21 @@ import React from 'react';
 import { nameEmail } from '../../../utils/constant';
 import { ProjectName } from 'components/ui';
 
-function PepoleFormDetails({ peopleDetails, setPeopleDetails }) {
+function PeopleFormDetails({ peopleDetails, setPeopleDetails }) {
+  const textChangeHandler = (e) => {
+    setPeopleDetails((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const selectChangeHandler = (e, newValue) => {
+    setPeopleDetails((prev) => ({
+      ...prev,
+      [e.target.id.split('-')[0]]: newValue,
+    }));
+  };
+
   return (
     <div className='tw-grid tw-grid-cols-6 tw-gap-y-4'>
       <ProjectName name={'Project'} />
@@ -19,38 +33,33 @@ function PepoleFormDetails({ peopleDetails, setPeopleDetails }) {
         {/* Basic part 1 */}
         <div className='tw-grid tw-grid-cols-2 tw-gap-4 tw-mb-5'>
           <div className='tw-col-span-1 '>
-            <InputLabel id='client Name'>Client naame</InputLabel>
+            <InputLabel id='client Name'>Client Name</InputLabel>
             <TextField
               className='tw-w-[90%]'
-              id='demo-helper-text-aligned'
+              id='clientName'
+              name='clientName'
               value={peopleDetails.clientName}
               required={true}
-              onChange={(e) => {
-                setPeopleDetails((prev) => ({
-                  ...prev,
-                  clientName: e.target.value,
-                }));
-              }}
+              // never pass directly
+              onChange={textChangeHandler}
             />
           </div>
           <div className='tw-col-span-1'>
-            <InputLabel id='demo-simple-select-label'>Colabrators</InputLabel>
+            <InputLabel id='demo-simple-select-label'>Collaborators</InputLabel>
             <Autocomplete
               multiple
+              id='collaborators'
               className='tw-w-[90%]'
               options={nameEmail}
               onChange={(_e, newValue) => {
-                setPeopleDetails((prev) => ({
-                  ...prev,
-                  colaborators: newValue,
-                }));
+                selectChangeHandler(_e, newValue);
               }}
               getOptionLabel={(option) => option.name}
               filterSelectedOptions
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label='Select colaborators'
+                  label='Select collaborator'
                   placeholder='Favorites'
                 />
               )}
@@ -61,18 +70,15 @@ function PepoleFormDetails({ peopleDetails, setPeopleDetails }) {
         <div className='tw-grid tw-grid-cols-2 tw-gap-4'>
           <div className='tw-col-span-1'>
             <InputLabel id='demo-simple-select-label'>
-              Engagment director
+              Engagement director
             </InputLabel>
             <Autocomplete
               options={nameEmail}
               className='tw-w-[90%]'
+              id='director'
               disablePortal
-              // value={peopleDetails.colaborators || []}
               onChange={(_e, newValue) => {
-                setPeopleDetails((prev) => ({
-                  ...prev,
-                  director: newValue,
-                }));
+                selectChangeHandler(_e, newValue);
               }}
               getOptionLabel={(option) => option.name}
               filterSelectedOptions
@@ -86,15 +92,11 @@ function PepoleFormDetails({ peopleDetails, setPeopleDetails }) {
             <Select
               labelId='demo-simple-select-label'
               className='tw-w-[90%]'
-              id='demo-simple-select'
+              id='projectLead'
+              name='projectLead'
               // value={age}
               label='Age'
-              onChange={(_e) => {
-                setPeopleDetails((prev) => ({
-                  ...prev,
-                  projectLead: _e.target.value,
-                }));
-              }}
+              onChange={textChangeHandler}
             >
               <MenuItem value={'trilok'}>trilok</MenuItem>
               <MenuItem value={'kaushik'}>Kaushik</MenuItem>
@@ -107,4 +109,4 @@ function PepoleFormDetails({ peopleDetails, setPeopleDetails }) {
   );
 }
 
-export { PepoleFormDetails };
+export { PeopleFormDetails };

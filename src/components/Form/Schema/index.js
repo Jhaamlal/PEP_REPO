@@ -1,4 +1,3 @@
-// const Joi = require('joi');
 const Joi = require('joi');
 
 export const BasicDetailSchema = {
@@ -8,18 +7,11 @@ export const BasicDetailSchema = {
   endData: Joi.string().min(4).required(),
   descriptions: Joi.string().required(),
 };
-const myRegexPattern = new RegExp(/^.*[<>{}].*$/s);
+const myRegexPattern = new RegExp(/[^a-zA-Z0-9 ]/);
 
 export const chargeCodeSchema = Joi.object({
-  field: Joi.string()
-    .custom((value, helpers) => {
-      return myRegexPattern.test(value) ? helpers.error('any.invalid') : value;
-    })
-    .messages({
-      'any.invalid': "Whooaaa! That's a Bad String",
-    }),
-});
-
-export const descriptionSchema = Joi.object({
-  field: Joi.string().min(0).max(6).label('Description'),
+  field: Joi.string().min(6).regex(myRegexPattern, { invert: true }).message({
+    'string.pattern.invert.base': 'Special character is Not allowed',
+    'string.min': 'length must be of 6 char',
+  }),
 });

@@ -9,7 +9,7 @@ import {
   grandParentUpdate,
   parentUpdate,
 } from '../../Store/Features/leverSlice';
-import { sectoreData } from 'utils';
+import { sectorsData } from 'utils';
 
 function Sectors({ selectedLever, leverObject }) {
   const [selectedSegment, setSelectedSegment] = useState('');
@@ -18,7 +18,7 @@ function Sectors({ selectedLever, leverObject }) {
   const selector = useSelector((state) => state.levers.sectorData);
 
   const { data: leverData } = useGetSingleLever(selectedLever);
-  const selectedSectorsData = sectoreData({ leverData });
+  const selectedSectorsData = sectorsData({ leverData });
   const selectedSector = leverData?.[0]?.['sector'];
 
   useEffect(() => {
@@ -69,7 +69,7 @@ function Sectors({ selectedLever, leverObject }) {
   };
   const isGrandParentChecked = !!selector[selectedSector]?.['isChecked'];
   const isGrandParentIndeterminate =
-    !!selector[selectedSector]?.['isIntermeideate'];
+    !!selector[selectedSector]?.['intermediate'];
   return (
     <>
       <div className='tw-grid tw-grid-cols-6 tw-h-96 tw-gap-4 tw-mt-8 tw-mx-4'>
@@ -90,7 +90,7 @@ function Sectors({ selectedLever, leverObject }) {
           {Object.keys(selectedSectorsData).map((item, index) => {
             const isChecked = !!selector[selectedSector]?.[item]?.['isChecked'];
             const isInterMediate =
-              !!selector[selectedSector]?.[item]?.['isIntermeideate'];
+              !!selector[selectedSector]?.[item]?.['intermediate'];
             return (
               <div
                 className={`tw-ml-2 tw-flex tw-justify-between active:tw-bg-blue-200`}

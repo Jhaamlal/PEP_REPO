@@ -5,7 +5,7 @@ import {
   getGrandParentSelection,
   grandTotal,
   hasContainChildElement,
-  setIntermideateState,
+  setIntermediate,
   withoutChildElement,
 } from '../utils';
 
@@ -13,27 +13,27 @@ const initialState = {
   sectorData: {
     Agriculture: {
       isChecked: false,
-      isIntermeideate: false,
+      intermediate: false,
       totalSegmentSelected: 0,
     },
     Industry: {
       isChecked: false,
-      isIntermeideate: false,
+      intermediate: false,
       totalSegmentSelected: 0,
     },
     Sector: {
       isChecked: false,
-      isIntermeideate: false,
+      intermediate: false,
       totalSegmentSelected: 0,
     },
     Transport: {
       isChecked: false,
-      isIntermeideate: false,
+      intermediate: false,
       totalSegmentSelected: 0,
     },
     Power: {
       isChecked: false,
-      isIntermeideate: false,
+      intermediate: false,
       totalSegmentSelected: 0,
     },
     grandTotal: 0,
@@ -41,7 +41,7 @@ const initialState = {
 };
 const initialParentObj = {
   isChecked: false,
-  isIntermeideate: false,
+  intermediate: false,
   totalSegmentSelected: 0,
 };
 
@@ -74,7 +74,7 @@ const leversSclice = createSlice({
         allSectorData[selectedSector] = {
           ...allSectorData[selectedSector],
           isChecked: true,
-          isIntermeideate: false,
+          intermediate: false,
           ...newSegment,
         };
 
@@ -111,7 +111,7 @@ const leversSclice = createSlice({
           ...allSectorData[selectedSector],
           [selectedSegment]: {
             isChecked: true,
-            isIntermeideate: false,
+            intermediate: false,
             segmentSelected: 0,
             selectedChild: [],
           },
@@ -133,7 +133,7 @@ const leversSclice = createSlice({
       allSectorData[selectedSector] = {
         ...allSectorData[selectedSector],
         isChecked: isGPSelected,
-        isIntermeideate: isGPIntermidiate,
+        intermediate: isGPIntermidiate,
       };
 
       state.sectorData = grandTotal({ allSectorData });
@@ -179,7 +179,7 @@ const leversSclice = createSlice({
           ...allSectorData[selectedSector],
           [selectedSegment]: {
             isChecked: true,
-            isIntermeideate: false,
+            intermediate: false,
             segmentSelected: 0,
             selectedChild: [],
           },
@@ -214,7 +214,7 @@ const leversSclice = createSlice({
 
       // agar false hai
       if (!isAllChildSelected) {
-        allSectorData = setIntermideateState({
+        allSectorData = setIntermediate({
           allSectorData,
           selectedSector,
           selectedSegment,
@@ -225,21 +225,21 @@ const leversSclice = createSlice({
           allSectorData[selectedSector] = {
             ...allSectorData[selectedSector],
             isChecked: true,
-            isIntermeideate: false,
+            intermediate: false,
           };
         }
         if (!isGPSelected) {
           allSectorData[selectedSector] = {
             ...allSectorData[selectedSector],
             isChecked: false,
-            isIntermeideate: true,
+            intermediate: true,
           };
         }
 
         allSectorData[selectedSector][selectedSegment] = {
           ...allSectorData[selectedSector][selectedSegment],
           isChecked: true,
-          isIntermeideate: false,
+          intermediate: false,
         };
       }
       state.sectorData = { ...allSectorData };
