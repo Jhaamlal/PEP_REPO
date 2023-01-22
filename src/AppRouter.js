@@ -1,4 +1,4 @@
-import { FormComponent, Home, HomeComponents, Levers } from 'container';
+import { FormComponent, HomeComponents } from 'container';
 import React from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';

@@ -118,3 +118,19 @@ export const allSectorsData = ({ levers }) => {
 
   return leverObject;
 };
+
+export const selectedSegment = ({ selector }) => {
+  const selectedItem = {};
+  for (const sector of Object.entries(selector)) {
+    if (typeof sector[1] === 'object') {
+      for (const segment of Object.entries(sector[1])) {
+        if (typeof segment[1] === 'object') {
+          selectedItem[segment[0]] = {
+            ...segment[1]['selectedChild'],
+          };
+        }
+      }
+    }
+  }
+  return selectedItem;
+};

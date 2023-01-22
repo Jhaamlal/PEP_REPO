@@ -1,10 +1,24 @@
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { ModalComponent } from 'components/ui/Modal';
 import React, { useEffect, useState } from 'react';
 import { formValid } from 'utils';
 import { Basic } from './BasicDetails';
 import { ChargeCode } from './ChargeCode';
 import { PeopleFormDetails } from './PeopleDetails';
+import { Selectedchildren } from 'components/ui';
+
+const WarningModal = () => {
+  return (
+    <>
+      <Typography id='modal-modal-title' variant='h6' component='h2'>
+        Leave the Page ?
+      </Typography>
+      <Typography id='modal-modal-description' sx={{ mt: 2 }}>
+        Change You made will not be save ? Are You sure ?
+      </Typography>
+    </>
+  );
+};
 
 let todays = new Date().toISOString().split('T')[0];
 function ProjectForm() {
@@ -15,9 +29,8 @@ function ProjectForm() {
     endData: todays,
     descriptions: '',
   });
-
+  const [selectedModal, setSelectedModal] = useState(WarningModal);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const [chargeCode, setChargeCode] = useState({
@@ -45,6 +58,16 @@ function ProjectForm() {
   const isReadyToSubmit =
     isFormValid.basicDetails && isFormValid.peopleDetails && chargeCode.error;
 
+  const proceedHandler = () => {
+    setSelectedModal(<Selectedchildren />);
+    setOpen(true);
+  };
+
+  const cancelHandler = () => {
+    setSelectedModal(<WarningModal />);
+    setOpen(true);
+  };
+
   return (
     <div className=' tw-bg-white tw-px-8 '>
       <h1>Project Info</h1>
@@ -62,7 +85,11 @@ function ProjectForm() {
         />
       </div>
       <hr className='tw-h-8 tw-min-w-full tw-col-span-6'></hr>
-      <ModalComponent open={open} handleClose={handleClose} />
+      <ModalComponent
+        open={open}
+        handleClose={handleClose}
+        modalComponent={selectedModal}
+      />
 
       <ChargeCode chargeCode={chargeCode} setChargeCode={setChargeCode} />
 
@@ -73,12 +100,16 @@ function ProjectForm() {
             <Button
               variant='outlined'
               sx={{ marginRight: 2 }}
-              onClick={handleOpen}
+              onClick={cancelHandler}
             >
               Cancel
             </Button>
-            <Button variant='outlined' disabled={!isReadyToSubmit}>
-              Procced
+            <Button
+              variant='outlined'
+              disabled={!isReadyToSubmit}
+              onClick={proceedHandler}
+            >
+              Proceed
             </Button>
           </div>
         </div>

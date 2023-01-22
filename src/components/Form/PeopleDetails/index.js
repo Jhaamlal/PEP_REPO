@@ -57,11 +57,7 @@ function PeopleFormDetails({ peopleDetails, setPeopleDetails }) {
               getOptionLabel={(option) => option.name}
               filterSelectedOptions
               renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label='Select collaborator'
-                  placeholder='Favorites'
-                />
+                <TextField {...params} placeholder='Favorites' />
               )}
             />
           </div>

@@ -106,14 +106,14 @@ function Basic({ basicDetails, setBasicDetails, error }) {
           </div>
         </div>
         {/* Basic 2 */}
-        <div className='tw-grid tw-grid-cols-4 tw-gap-y-4 tw-my-4'>
+        <div className='tw-grid tw-grid-cols-4 tw-gap-4 tw-my-4'>
           <div className='tw-col-span-2 '>
             <InputLabel id='demo-simple-select-label'>
               Project Start date
             </InputLabel>
             <DatePicker
               value={startDate}
-              className='tw-w-[33rem]'
+              className='tw-w-full'
               disablePast={true}
               required={true}
               onChange={(newValue) => {
@@ -130,9 +130,10 @@ function Basic({ basicDetails, setBasicDetails, error }) {
             </InputLabel>
             <DatePicker
               value={endDate}
-              className='tw-w-[33rem]'
+              className='tw-w-full'
               disablePast={true}
               required={true}
+              minDate={startDate}
               onChange={(newValue) => {
                 setEndDate(newValue);
                 handleEndData(newValue);
@@ -146,7 +147,7 @@ function Basic({ basicDetails, setBasicDetails, error }) {
         <div className='tw-col-span-2'>
           <InputLabel id='Form Id'>Description</InputLabel>
           <TextField
-            className='tw-w-[80%]'
+            className='tw-w-full'
             placeholder='Put the Descriptions'
             name='descriptions'
             multiline

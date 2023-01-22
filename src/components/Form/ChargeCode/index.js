@@ -37,7 +37,7 @@ function ChargeCode({ chargeCode, setChargeCode }) {
 
               <TextField
                 value={chargeCode.value}
-                className='tw-w-[50%]'
+                className='tw-w-[45%]'
                 onChange={handleChargeCodeChange}
                 helperText={chargeCode.errorMessage} // error message
                 inputProps={{ maxLength: 6 }}

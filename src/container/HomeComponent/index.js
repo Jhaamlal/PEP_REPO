@@ -17,7 +17,7 @@ const HomeComponents = () => {
   }, [selector.grandTotal]);
 
   const navigateHandler = () => {
-    navigation('/form');
+    navigation('/child');
   };
 
   return (

@@ -1,7 +1,6 @@
 import React from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,26 +16,16 @@ const style = {
   p: 4,
 };
 
-function ModalComponent({ open, handleClose }) {
+function ModalComponent({ open, handleClose, modalComponent }) {
   const navigation = useNavigate();
   const leaveHandler = () => {
     navigation('/');
   };
   return (
     <div>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='modal-modal-title'
-        aria-describedby='modal-modal-description'
-      >
+      <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
-          <Typography id='modal-modal-title' variant='h6' component='h2'>
-            Leave the Page ?
-          </Typography>
-          <Typography id='modal-modal-description' sx={{ mt: 2 }}>
-            Change You made will not be save ? Are You sure ?
-          </Typography>
+          {modalComponent}
           <Button />
           <div className='tw-flex tw-justify-end '>
             <Button
@@ -46,7 +35,9 @@ function ModalComponent({ open, handleClose }) {
             >
               Leave
             </Button>
-            <Button variant='contained'>Stay</Button>
+            <Button variant='contained' onClick={handleClose}>
+              Stay
+            </Button>
           </div>
         </Box>
       </Modal>
