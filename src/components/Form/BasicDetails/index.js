@@ -13,6 +13,7 @@ function Basic({ basicDetails, setBasicDetails, error }) {
   const [errors, setErrors] = useState({});
 
   const handleStartData = (newValue) => {
+    setStartDate(newValue);
     const changeFormate = `${newValue['$y']}-${newValue['$M'] + 1}-${
       newValue['$D']
     }`;
@@ -21,6 +22,7 @@ function Basic({ basicDetails, setBasicDetails, error }) {
     });
   };
   const handleEndData = (newValue) => {
+    setEndDate(newValue);
     const changeFormate = `${newValue['$y']}-${newValue['$M'] + 1}-${
       newValue['$D']
     }`;
@@ -117,9 +119,7 @@ function Basic({ basicDetails, setBasicDetails, error }) {
               disablePast={true}
               required={true}
               onChange={(newValue) => {
-                setStartDate(newValue);
                 handleStartData(newValue);
-                // handleDates({ newValue, type: 'startDate' });
               }}
               renderInput={(params) => <TextField {...params} />}
             />
@@ -135,9 +135,7 @@ function Basic({ basicDetails, setBasicDetails, error }) {
               required={true}
               minDate={startDate}
               onChange={(newValue) => {
-                setEndDate(newValue);
                 handleEndData(newValue);
-                // handleDates({ newValue, type: 'endtDate' });
               }}
               renderInput={(params) => <TextField {...params} />}
             />

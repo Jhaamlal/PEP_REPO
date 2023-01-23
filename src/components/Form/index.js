@@ -25,8 +25,8 @@ function ProjectForm() {
   const [basicDetails, setBasicDetails] = useState({
     projectName: '',
     projectType: '',
-    startDate: todays,
-    endData: todays,
+    startDate: '',
+    endData: '',
     descriptions: '',
   });
   const [selectedModal, setSelectedModal] = useState(WarningModal);
