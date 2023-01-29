@@ -2,7 +2,7 @@ import { Button, Typography } from '@mui/material';
 import { ModalComponent } from 'components/ui/Modal';
 import React, { useEffect, useState } from 'react';
 import { formValid } from 'utils';
-import { Basic } from './BasicDetails';
+import { BasicDetails } from './BasicDetails';
 import { ChargeCode } from './ChargeCode';
 import { PeopleFormDetails } from './PeopleDetails';
 import { Selectedchildren } from 'components/ui';
@@ -20,7 +20,6 @@ const WarningModal = () => {
   );
 };
 
-let todays = new Date().toISOString().split('T')[0];
 function ProjectForm() {
   const [basicDetails, setBasicDetails] = useState({
     projectName: '',
@@ -72,9 +71,10 @@ function ProjectForm() {
     <div className=' tw-bg-white tw-px-8 '>
       <h1>Project Info</h1>
       <div className='tw-my-8'>
-        <Basic
+        <BasicDetails
           setBasicDetails={setBasicDetails}
-          basicDetails={setBasicDetails}
+          // naming function
+          basicDetails={basicDetails}
         />
       </div>
       <hr className='tw-h-8 tw-min-w-full tw-col-span-6'></hr>

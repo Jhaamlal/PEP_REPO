@@ -1,6 +1,6 @@
 import { useGetLevers } from 'api';
 import { Header } from 'components';
-import React from 'react';
+import React, { memo } from 'react';
 
 function Home() {
   const { data: leversData } = useGetLevers();
@@ -13,5 +13,5 @@ function Home() {
     </div>
   );
 }
-
+Home = memo(Home);
 export { Home };

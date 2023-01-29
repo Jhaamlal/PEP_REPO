@@ -104,5 +104,5 @@ function PeopleFormDetails({ peopleDetails, setPeopleDetails }) {
     </div>
   );
 }
-
+PeopleFormDetails = React.memo(PeopleFormDetails);
 export { PeopleFormDetails };

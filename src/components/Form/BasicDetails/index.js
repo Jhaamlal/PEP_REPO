@@ -1,13 +1,13 @@
 import { InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { validateProperty } from 'utils';
 
 import { BasicDetailSchema } from '../schema';
 import { ProjectName } from 'components/ui';
 
 let todays = new Date().toISOString().split('T')[0];
-function Basic({ basicDetails, setBasicDetails, error }) {
+function BasicDetails({ basicDetails, setBasicDetails, error }) {
   const [startDate, setStartDate] = useState(todays);
   const [endDate, setEndDate] = useState(todays);
   const [errors, setErrors] = useState({});
@@ -166,5 +166,5 @@ function Basic({ basicDetails, setBasicDetails, error }) {
     </div>
   );
 }
-
-export { Basic };
+BasicDetails = memo(BasicDetails);
+export { BasicDetails };
