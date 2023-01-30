@@ -8,7 +8,7 @@ import {
   childUpdate,
   grandParentUpdate,
   parentUpdate,
-} from '../../Store/Features/leverSlice';
+} from '../../store/Features/leverSlice';
 import { sectorsData } from 'utils';
 
 function Sectors({ selectedLever, leverObject }) {

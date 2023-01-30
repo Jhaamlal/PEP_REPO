@@ -1,4 +1,4 @@
-import { createSlice, current } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import {
   addSegmentChild,
   createNewSegment,
@@ -45,7 +45,7 @@ const initialParentObj = {
   totalSegmentSelected: 0,
 };
 
-const leversSclice = createSlice({
+const leversSlice = createSlice({
   name: 'assumptions',
   initialState,
   reducers: {
@@ -124,7 +124,7 @@ const leversSclice = createSlice({
         });
       }
 
-      const { isGPSelected, isGPIntermidiate } = getGrandParentSelection({
+      const { isGPSelected, isGPIntermediate } = getGrandParentSelection({
         selectedSectorSegments,
         allSectorData,
         selectedSector,
@@ -133,7 +133,7 @@ const leversSclice = createSlice({
       allSectorData[selectedSector] = {
         ...allSectorData[selectedSector],
         isChecked: isGPSelected,
-        intermediate: isGPIntermidiate,
+        intermediate: isGPIntermediate,
       };
 
       state.sectorData = grandTotal({ allSectorData });
@@ -206,7 +206,7 @@ const leversSclice = createSlice({
         selectedSectorSegments[selectedSegment].length <=
         allSectorData[selectedSector][selectedSegment]['segmentSelected'];
 
-      const { isGPSelected, isGPIntermidiate } = getGrandParentSelection({
+      const { isGPSelected, isGPIntermediate } = getGrandParentSelection({
         selectedSectorSegments,
         allSectorData,
         selectedSector,
@@ -247,6 +247,6 @@ const leversSclice = createSlice({
   },
 });
 
-export default leversSclice.reducer;
+export default leversSlice.reducer;
 export const { grandParentUpdate, parentUpdate, childUpdate } =
-  leversSclice.actions;
+  leversSlice.actions;

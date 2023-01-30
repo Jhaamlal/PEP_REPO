@@ -2,7 +2,7 @@ import { FormComponent, HomeComponents } from 'container';
 import React from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from 'Store';
+import store from 'store';
 
 function AppRouter() {
   return (

@@ -32,9 +32,9 @@ export const getGrandParentSelection = ({
   selectedSector,
 }) => {
   let isChecked = 0;
-  let isUncheacked = 0;
+  let isUnchecked = 0;
   let isGPSelected = false;
-  let isGPIntermidiate = false;
+  let isGPIntermediate = false;
   const allSectorKeys = Object.keys(selectedSectorSegments);
   for (const key of allSectorKeys) {
     const isKeyChecked =
@@ -44,20 +44,20 @@ export const getGrandParentSelection = ({
       isChecked += 1;
     }
     if (!isKeyChecked) {
-      isUncheacked += 1;
+      isUnchecked += 1;
     }
   }
 
   allSectorKeys.length === isChecked
     ? (isGPSelected = true)
-    : (isGPIntermidiate = true);
+    : (isGPIntermediate = true);
 
   if (isChecked === 0) {
     isGPSelected = false;
-    isGPIntermidiate = false;
+    isGPIntermediate = false;
   }
 
-  return { isGPSelected, isGPIntermidiate };
+  return { isGPSelected, isGPIntermediate };
 };
 
 export const setIntermediate = ({
