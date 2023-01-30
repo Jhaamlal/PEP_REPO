@@ -9,7 +9,7 @@ import {
 import React from 'react';
 
 import { nameEmail } from '../../../utils/constant';
-import { ProjectName } from 'components/ui';
+import { ProjectName } from 'components/UI';
 
 function PeopleFormDetails({ peopleDetails, setPeopleDetails }) {
   const textChangeHandler = (e) => {

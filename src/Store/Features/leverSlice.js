@@ -7,7 +7,7 @@ import {
   hasContainChildElement,
   setIntermediate,
   withoutChildElement,
-} from '../utils';
+} from '../Utils';
 
 const initialState = {
   sectorData: {

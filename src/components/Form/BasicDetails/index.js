@@ -3,8 +3,8 @@ import { DatePicker } from '@mui/x-date-pickers';
 import React, { useState, memo } from 'react';
 import { validateProperty } from 'utils';
 
-import { BasicDetailSchema } from '../schema';
-import { ProjectName } from 'components/ui';
+import { BasicDetailSchema } from '../Schema';
+import { ProjectName } from 'components/UI';
 
 let todays = new Date().toISOString().split('T')[0];
 function BasicDetails({ basicDetails, setBasicDetails, error }) {

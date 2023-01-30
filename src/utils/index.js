@@ -3,6 +3,7 @@ import { compile } from 'path-to-regexp';
 
 export const pathToUrl = (path, params = {}) => compile(path)(params);
 
+// check over all form validity
 export const formValid = ({ basicDetails, peopleDetails, setIsFormValid }) => {
   for (const key in basicDetails) {
     const isValueAllExist = basicDetails[key].length >= 4;
@@ -53,6 +54,8 @@ export const formValid = ({ basicDetails, peopleDetails, setIsFormValid }) => {
   }
 };
 
+// check each form input validity
+
 export const validateProperty = ({ event, BasicDetailSchema }) => {
   const { name, value } = event.target;
   const obj = { [name]: value };
@@ -62,6 +65,7 @@ export const validateProperty = ({ event, BasicDetailSchema }) => {
   return error ? error.details[0].message : null;
 };
 
+// initial create the sector Data
 export const sectorsData = ({ leverData }) => {
   const selectedSectorsData = {};
   leverData?.map((item, index) => {
@@ -86,20 +90,21 @@ export const sectorsData = ({ leverData }) => {
   return selectedSectorsData;
 };
 
+// All does some Filter and remove the useless data that coming from the network
 export const allSectorsData = ({ levers }) => {
   const leverObject = {};
   levers?.map((item, index) => {
     const isSectorExist = leverObject.hasOwnProperty(item['sector']);
 
     if (isSectorExist) {
-      const isSegemntExist = leverObject?.[item['sector']]?.hasOwnProperty(
+      const isSegmentExist = leverObject?.[item['sector']]?.hasOwnProperty(
         item['segment'],
       );
-      if (isSegemntExist) {
+      if (isSegmentExist) {
         leverObject[item['sector']]['total'] += 1;
         leverObject[item['sector']][item['segment']] += 1;
       }
-      if (!isSegemntExist) {
+      if (!isSegmentExist) {
         leverObject[item['sector']] = {
           ...leverObject[item['sector']],
           [item['segment']]: 0,

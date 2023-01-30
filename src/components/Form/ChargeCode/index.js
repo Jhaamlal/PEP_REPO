@@ -1,7 +1,7 @@
 import { InputLabel, TextField } from '@mui/material';
-import { ProjectName } from 'components/ui';
+import { ProjectName } from 'components/UI';
 import React, { useState, memo } from 'react';
-import { chargeCodeSchema } from '../schema';
+import { chargeCodeSchema } from '../Schema';
 
 function ChargeCode({ chargeCode, setChargeCode }) {
   const handleChargeCodeChange = (e) => {

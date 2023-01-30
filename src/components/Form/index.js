@@ -1,11 +1,11 @@
 import { Button, Typography } from '@mui/material';
-import { ModalComponent } from 'components/ui/Modal';
+import { ModalComponent } from 'components/UI/Modal';
 import React, { useEffect, useState } from 'react';
 import { formValid } from 'utils';
 import { BasicDetails } from './BasicDetails';
 import { ChargeCode } from './ChargeCode';
 import { PeopleFormDetails } from './PeopleDetails';
-import { Selectedchildren } from 'components/ui';
+import { Selectedchildren } from 'components/UI';
 
 const WarningModal = () => {
   return (
