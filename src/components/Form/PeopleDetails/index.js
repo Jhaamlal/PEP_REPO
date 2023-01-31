@@ -57,7 +57,7 @@ function PeopleFormDetails({ peopleDetails, setPeopleDetails }) {
               getOptionLabel={(option) => option.name}
               filterSelectedOptions
               renderInput={(params) => (
-                <TextField {...params} placeholder='Favorites' />
+                <TextField {...params} placeholder='Collaborators' />
               )}
             />
           </div>
@@ -79,7 +79,7 @@ function PeopleFormDetails({ peopleDetails, setPeopleDetails }) {
               getOptionLabel={(option) => option.name}
               filterSelectedOptions
               renderInput={(params) => (
-                <TextField {...params} placeholder='Engagment director' />
+                <TextField {...params} placeholder='Engagement director' />
               )}
             />
           </div>
@@ -90,8 +90,7 @@ function PeopleFormDetails({ peopleDetails, setPeopleDetails }) {
               className='tw-w-[90%]'
               id='projectLead'
               name='projectLead'
-              // value={age}
-              label='Age'
+              label=''
               onChange={textChangeHandler}
             >
               <MenuItem value={'trilok'}>trilok</MenuItem>

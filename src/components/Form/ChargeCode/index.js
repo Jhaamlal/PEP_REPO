@@ -1,6 +1,6 @@
 import { InputLabel, TextField } from '@mui/material';
 import { ProjectName } from 'components/UI';
-import React, { useState, memo } from 'react';
+import React, { memo } from 'react';
 import { chargeCodeSchema } from '../Schema';
 
 function ChargeCode({ chargeCode, setChargeCode }) {

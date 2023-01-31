@@ -1,12 +1,13 @@
 import { useGetLevers } from 'api';
 import { Lever, Sectors } from 'components';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { allSectorsData } from 'utils';
 
 function Levers() {
   const [selectedLever, setSelectedLever] = useState('Agriculture');
   const { data: levers } = useGetLevers();
-  const leverObject = allSectorsData({ levers });
+  const leverObject = useMemo(() => allSectorsData({ levers }), [levers]);
+
   return (
     <div>
       <Lever leverObject={leverObject} setSelectedLever={setSelectedLever} />

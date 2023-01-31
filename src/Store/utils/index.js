@@ -1,3 +1,4 @@
+// all item selected in that all sectors
 export function grandTotal({ allSectorData }) {
   let total = 0;
   for (let index = 0; index < Object.keys(allSectorData).length - 1; index++) {
@@ -140,6 +141,8 @@ export const withoutChildElement = ({
   return { ...allSectorData };
 };
 
+// Put the child of sector data in array of SelectedChild by iterate over it.
+// also Increment in segmentedSelected add +1 and also in TotalSegment add
 export const addSegmentChild = ({
   selectedSegment,
   selectedSectorSegments,

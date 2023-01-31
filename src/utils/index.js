@@ -3,7 +3,7 @@ import { compile } from 'path-to-regexp';
 
 export const pathToUrl = (path, params = {}) => compile(path)(params);
 
-// check over all form validity
+// check over all form validity,this is not Generic function
 export const formValid = ({ basicDetails, peopleDetails, setIsFormValid }) => {
   for (const key in basicDetails) {
     const isValueAllExist = basicDetails[key].length >= 4;

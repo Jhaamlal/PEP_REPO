@@ -46,7 +46,7 @@ const initialParentObj = {
 };
 
 const leversSlice = createSlice({
-  name: 'assumptions',
+  name: 'Levers',
   initialState,
   reducers: {
     grandParentUpdate: (state, { payload }) => {
@@ -56,6 +56,7 @@ const leversSlice = createSlice({
 
       let allSectorData = { ...state.sectorData };
 
+      //
       if (isChecked) {
         allSectorData = {
           ...allSectorData,
@@ -65,6 +66,7 @@ const leversSlice = createSlice({
         };
       }
 
+      // if not checked add item inside sectors
       if (!isChecked) {
         Object.keys(selectedSectorsData).map((item, index) => {
           allSectorData[selectedSector]['totalSegmentSelected'] +=
@@ -78,14 +80,13 @@ const leversSlice = createSlice({
           ...newSegment,
         };
 
+        // push each child id  into array of selected child
         Object.keys(selectedSectorsData).map((sectorKey, index) => {
           selectedSectorsData[sectorKey].map((item) => {
             allSectorData[selectedSector][sectorKey]['selectedChild'].push(
               item['id'],
             );
-            return;
           });
-          return '';
         });
       }
       state.sectorData = grandTotal({ allSectorData });
@@ -98,6 +99,7 @@ const leversSlice = createSlice({
       const isSegmentExist =
         allSectorData[selectedSector].hasOwnProperty(selectedSegment);
 
+      // if segment existed ,mean it is checked or Intermediate state, so remove it  from the object
       if (isSegmentExist) {
         const segmentSelected =
           allSectorData[selectedSector]?.[selectedSegment]['segmentSelected'];
@@ -106,6 +108,7 @@ const leversSlice = createSlice({
           segmentSelected;
       }
 
+      // If segment not existed ,  create a new Object ,and Put the checked the parent  and put child into that
       if (!isSegmentExist) {
         allSectorData[selectedSector] = {
           ...allSectorData[selectedSector],
@@ -124,6 +127,8 @@ const leversSlice = createSlice({
         });
       }
 
+      // it check that if ,parent selected what is state of  selectAll checkbox
+      // it isChecked or in intermediate state
       const { isGPSelected, isGPIntermediate } = getGrandParentSelection({
         selectedSectorSegments,
         allSectorData,
@@ -149,12 +154,13 @@ const leversSlice = createSlice({
       const hasSegment =
         allSectorData[selectedSector].hasOwnProperty(selectedSegment);
 
-      // if segemnt,and child nahi hai
+      // if segment,then check if that particular Item is existed or Not
       if (hasSegment) {
         const hasChild = allSectorData[selectedSector][
           selectedSegment
         ].selectedChild.includes(selectedItem['id']);
 
+        // if childElement is not there then add that particular element
         if (!hasChild) {
           allSectorData = hasContainChildElement({
             allSectorData,
@@ -163,6 +169,7 @@ const leversSlice = createSlice({
             selectedSegment,
           });
         }
+        // If childElement is There ,remove it as it was again clicked means new ,it is to remove now
         if (hasChild) {
           allSectorData = withoutChildElement({
             allSectorData,
@@ -173,8 +180,9 @@ const leversSlice = createSlice({
         }
       }
 
-      // if no segment
+      // if no segment ,it means child has been selected without parent so, it has to be select it's parent also
       if (!hasSegment) {
+        // create parent of selected child
         allSectorData[selectedSector] = {
           ...allSectorData[selectedSector],
           [selectedSegment]: {
@@ -184,6 +192,7 @@ const leversSlice = createSlice({
             selectedChild: [],
           },
         };
+        // push child and update the selected item list
         allSectorData[selectedSector][selectedSegment] = {
           ...allSectorData[selectedSector][selectedSegment],
           ...allSectorData[selectedSector][selectedSegment][
@@ -202,6 +211,8 @@ const leversSlice = createSlice({
       state.sectorData = grandTotal({ allSectorData });
 
       allSectorData = { ...state.sectorData };
+
+      // Below is to check the item ,if it has to be in checked state  or intermediate state
       const isAllChildSelected =
         selectedSectorSegments[selectedSegment].length <=
         allSectorData[selectedSector][selectedSegment]['segmentSelected'];
@@ -212,7 +223,7 @@ const leversSlice = createSlice({
         selectedSector,
       });
 
-      // agar false hai
+      // agar false hai,if not all selected  then set it as Intermediate
       if (!isAllChildSelected) {
         allSectorData = setIntermediate({
           allSectorData,
@@ -220,6 +231,7 @@ const leversSlice = createSlice({
           selectedSegment,
         });
       }
+      // if parent selected then,see the GrandParent state
       if (isAllChildSelected) {
         if (isGPSelected) {
           allSectorData[selectedSector] = {
