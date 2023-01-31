@@ -12,36 +12,14 @@ function BasicDetails({ basicDetails, setBasicDetails, error }) {
   const [endDate, setEndDate] = useState(todays);
   const [errors, setErrors] = useState({});
 
-  const handleStartData = (newValue) => {
-    setStartDate(newValue);
+  const handleDates = (newValue, dateType) => {
     const changeFormate = `${newValue['$y']}-${newValue['$M'] + 1}-${
       newValue['$D']
     }`;
     setBasicDetails((prev) => {
-      return { ...prev, startDate: changeFormate };
+      return { ...prev, [dateType]: changeFormate };
     });
   };
-  const handleEndData = (newValue) => {
-    setEndDate(newValue);
-    const changeFormate = `${newValue['$y']}-${newValue['$M'] + 1}-${
-      newValue['$D']
-    }`;
-    setBasicDetails((prev) => {
-      return { ...prev, endData: changeFormate };
-    });
-  };
-
-  // const handleDates = ({ newValue, type }) => {
-  //   const changeFormate = `${newValue['$y']}-${newValue['$M'] + 1}-${
-  //     newValue['$D']
-  //   }`;
-
-  //   let yZ=type.toString()
-
-  //   setBasicDetails((prev) => {
-  //     return { ...prev, yZ: changeFormate };
-  //   });
-  // };
 
   const handleSave = (event) => {
     const { name, value } = event.target;
@@ -118,8 +96,9 @@ function BasicDetails({ basicDetails, setBasicDetails, error }) {
               className='tw-w-full'
               disablePast={true}
               required={true}
-              onChange={(newValue) => {
-                handleStartData(newValue);
+              onChange={(newValue, dateType = 'startDate') => {
+                setStartDate(newValue);
+                handleDates(newValue, dateType);
               }}
               renderInput={(params) => <TextField {...params} />}
             />
@@ -134,8 +113,9 @@ function BasicDetails({ basicDetails, setBasicDetails, error }) {
               disablePast={true}
               required={true}
               minDate={startDate}
-              onChange={(newValue) => {
-                handleEndData(newValue);
+              onChange={(newValue, dateType = 'endData') => {
+                setEndDate(newValue);
+                handleDates(newValue, dateType);
               }}
               renderInput={(params) => <TextField {...params} />}
             />
