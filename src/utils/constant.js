@@ -8,3 +8,13 @@ export const nameEmail = [
 
 export const logo =
   'https://thumbs.dreamstime.com/b/teamwork-community-logo-design-vector-adoption-social-network-template-156215000.jpg';
+
+export const basicDetailsActions = {
+  DATE: 'date',
+  TEXT: 'text',
+};
+
+export const peopleDetailsActions = {
+  TEXT: 'text',
+  SELECT: 'select',
+};

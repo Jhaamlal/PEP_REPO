@@ -1,11 +1,19 @@
 import { Button, Typography } from '@mui/material';
 import { ModalComponent } from 'components/UI/Modal';
-import React, { useEffect, useState } from 'react';
-import { formValid } from 'utils';
+import React, { useEffect, useReducer, useState } from 'react';
+import { formValidReducer } from 'utils';
 import { BasicDetails } from './BasicDetails';
 import { ChargeCode } from './ChargeCode';
 import { PeopleFormDetails } from './PeopleDetails';
 import { Selectedchildren } from 'components/UI';
+import {
+  basicDetailsInitialState,
+  basicDetailsReducers,
+} from './BasicDetails/reducers';
+import {
+  peopleDetailsInitialState,
+  peopleDetailsReducers,
+} from './PeopleDetails/reducers';
 
 const WarningModal = () => {
   return (
@@ -21,12 +29,9 @@ const WarningModal = () => {
 };
 
 function ProjectForm() {
-  const [basicDetails, setBasicDetails] = useState({
-    projectName: '',
-    projectType: '',
-    startDate: '',
-    endData: '',
-    descriptions: '',
+  const [isFormValidReducers, setIsFormValidReducers] = useState({
+    basicDetailsState: false,
+    peopleDetailsState: false,
   });
   const [selectedModal, setSelectedModal] = useState(WarningModal);
   const [open, setOpen] = useState(false);
@@ -37,25 +42,29 @@ function ProjectForm() {
     errorMessage: '',
     error: false,
   });
-
-  const [peopleDetails, setPeopleDetails] = useState({
-    clientName: '',
-    collaborators: '',
-    director: '',
-    projectLead: '',
-  });
-
-  const [isFormValid, setIsFormValid] = useState({
-    basicDetails: false,
-    peopleDetails: false,
-  });
+  const [basicDetailsState, basicDetailsDispatch] = useReducer(
+    basicDetailsReducers,
+    basicDetailsInitialState,
+  );
+  const [peopleDetailsState, peopleDetailsDispatch] = useReducer(
+    peopleDetailsReducers,
+    peopleDetailsInitialState,
+  );
 
   useEffect(() => {
-    formValid({ basicDetails, peopleDetails, setIsFormValid });
-  }, [peopleDetails, basicDetails]);
+    formValidReducer({
+      basicDetailsState,
+      peopleDetailsState,
+      setIsFormValidReducers,
+      isFormValidReducers,
+    });
+  }, [peopleDetailsState, basicDetailsState]);
 
+  // console.log('People details', basicDetailsState);
   const isReadyToSubmit =
-    isFormValid.basicDetails && isFormValid.peopleDetails && chargeCode.error;
+    isFormValidReducers.basicDetailsState &&
+    isFormValidReducers.peopleDetailsState &&
+    chargeCode.error;
 
   const proceedHandler = () => {
     setSelectedModal(<Selectedchildren />);
@@ -72,16 +81,15 @@ function ProjectForm() {
       <h1>Project Info</h1>
       <div className='tw-my-8'>
         <BasicDetails
-          setBasicDetails={setBasicDetails}
-          // naming function
-          basicDetails={basicDetails}
+          basicDetailsState={basicDetailsState}
+          basicDetailsDispatch={basicDetailsDispatch}
         />
       </div>
       <hr className='tw-h-8 tw-min-w-full tw-col-span-6'></hr>
       <div className='tw-my-8'>
         <PeopleFormDetails
-          peopleDetails={peopleDetails}
-          setPeopleDetails={setPeopleDetails}
+          peopleDetailsState={peopleDetailsState}
+          peopleDetailsDispatch={peopleDetailsDispatch}
         />
       </div>
       <hr className='tw-h-8 tw-min-w-full tw-col-span-6'></hr>

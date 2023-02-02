@@ -8,22 +8,22 @@ import {
 
 import React from 'react';
 
-import { nameEmail } from '../../../utils/constant';
+import { nameEmail, peopleDetailsActions } from '../../../utils/constant';
 import { ProjectName } from 'components/UI';
 
-function PeopleFormDetails({ peopleDetails, setPeopleDetails }) {
-  const textChangeHandler = (e) => {
-    setPeopleDetails((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+function PeopleFormDetails({ peopleDetailsState, peopleDetailsDispatch }) {
+  const textDispatchHandler = (event) => {
+    peopleDetailsDispatch({
+      type: peopleDetailsActions.TEXT,
+      payload: event,
+    });
   };
 
-  const selectChangeHandler = (e, newValue) => {
-    setPeopleDetails((prev) => ({
-      ...prev,
-      [e.target.id.split('-')[0]]: newValue,
-    }));
+  const selectDispatchHandler = (event, newValue) => {
+    peopleDetailsDispatch({
+      type: peopleDetailsActions.SELECT,
+      payload: { event, newValue },
+    });
   };
 
   return (
@@ -38,10 +38,9 @@ function PeopleFormDetails({ peopleDetails, setPeopleDetails }) {
               className='tw-w-[90%]'
               id='clientName'
               name='clientName'
-              value={peopleDetails.clientName}
+              value={peopleDetailsState.clientName}
               required={true}
-              // never pass directly
-              onChange={textChangeHandler}
+              onChange={textDispatchHandler}
             />
           </div>
           <div className='tw-col-span-1'>
@@ -52,7 +51,7 @@ function PeopleFormDetails({ peopleDetails, setPeopleDetails }) {
               className='tw-w-[90%]'
               options={nameEmail}
               onChange={(_e, newValue) => {
-                selectChangeHandler(_e, newValue);
+                selectDispatchHandler(_e, newValue);
               }}
               getOptionLabel={(option) => option.name}
               filterSelectedOptions
@@ -74,7 +73,7 @@ function PeopleFormDetails({ peopleDetails, setPeopleDetails }) {
               id='director'
               disablePortal
               onChange={(_e, newValue) => {
-                selectChangeHandler(_e, newValue);
+                selectDispatchHandler(_e, newValue);
               }}
               getOptionLabel={(option) => option.name}
               filterSelectedOptions
@@ -90,8 +89,9 @@ function PeopleFormDetails({ peopleDetails, setPeopleDetails }) {
               className='tw-w-[90%]'
               id='projectLead'
               name='projectLead'
-              label=''
-              onChange={textChangeHandler}
+              label='projectLead'
+              defaultValue=''
+              onChange={textDispatchHandler}
             >
               <MenuItem value={'trilok'}>trilok</MenuItem>
               <MenuItem value={'kaushik'}>Kaushik</MenuItem>

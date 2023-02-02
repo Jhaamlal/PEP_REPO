@@ -5,37 +5,26 @@ import { validateProperty } from 'utils';
 
 import { BasicDetailSchema } from '../Schema';
 import { ProjectName } from 'components/UI';
+import dayjs from 'dayjs';
+import { basicDetailsActions } from 'utils/constant';
 
-let todays = new Date().toISOString().split('T')[0];
-function BasicDetails({ basicDetails, setBasicDetails, error }) {
+// let todays = new Date().toISOString().split('T')[0];
+let todays = dayjs(new Date());
+function BasicDetails({ error, basicDetailsState, basicDetailsDispatch }) {
   const [startDate, setStartDate] = useState(todays);
   const [endDate, setEndDate] = useState(todays);
-  const [errors, setErrors] = useState({});
 
-  const handleDates = (newValue, dateType) => {
-    const changeFormate = `${newValue['$y']}-${newValue['$M'] + 1}-${
-      newValue['$D']
-    }`;
-    setBasicDetails((prev) => {
-      return { ...prev, [dateType]: changeFormate };
-    });
+  const handelDispatch = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    basicDetailsDispatch({ type: basicDetailsActions.TEXT, payload: event });
   };
 
-  const handleSave = (event) => {
-    const { name, value } = event.target;
-    let errorData = { ...errors };
-    const errorMessage = validateProperty({ event, BasicDetailSchema });
-    if (errorMessage) {
-      errorData[name] = errorMessage;
-    } else {
-      delete errorData[name];
-    }
-    let customerData = { ...basicDetails };
-    customerData[name] = value;
-    setBasicDetails((prev) => {
-      return { ...prev, ...customerData };
+  const handleDateDispatch = (newValue, dateType) => {
+    basicDetailsDispatch({
+      type: basicDetailsActions.DATE,
+      payload: { newValue, dateType },
     });
-    setErrors(errorData);
   };
 
   return (
@@ -48,16 +37,16 @@ function BasicDetails({ basicDetails, setBasicDetails, error }) {
             <InputLabel id='demo-simple-select-label'>Project Name</InputLabel>
             <TextField
               className='tw-w-full'
-              onChange={handleSave}
+              onChange={handelDispatch}
               name='projectName'
-              value={basicDetails.projectName}
+              value={basicDetailsState.projectName}
               id='demo-helper-text-aligned'
               inputProps={{ minLength: 3 }}
               required={true}
             />
-            {errors.projectName && (
+            {basicDetailsState.errors.projectName && (
               <div className='tw-text-red-400 tw-font-light'>
-                {errors.projectName}
+                {basicDetailsState.errors.projectName}
               </div>
             )}
           </div>
@@ -70,17 +59,17 @@ function BasicDetails({ basicDetails, setBasicDetails, error }) {
               labelId='demo-simple-select-label'
               id='demo-simple-select'
               label='Age'
-              value={basicDetails.projectType}
+              value={basicDetailsState.projectType}
               required={true}
-              onChange={handleSave}
+              onChange={handelDispatch}
             >
               <MenuItem value={'project1'}>Project 1</MenuItem>
               <MenuItem value={'project2'}>Project 2</MenuItem>
               <MenuItem value={'project3'}>Project 3</MenuItem>
             </Select>
-            {errors.projectType && (
+            {basicDetailsState.errors.projectType && (
               <div className='tw-text-red-400 tw-font-light'>
-                {errors.projectType}
+                {basicDetailsState.errors.projectType}
               </div>
             )}
           </div>
@@ -98,7 +87,7 @@ function BasicDetails({ basicDetails, setBasicDetails, error }) {
               required={true}
               onChange={(newValue, dateType = 'startDate') => {
                 setStartDate(newValue);
-                handleDates(newValue, dateType);
+                handleDateDispatch(newValue, dateType);
               }}
               renderInput={(params) => <TextField {...params} />}
             />
@@ -115,7 +104,7 @@ function BasicDetails({ basicDetails, setBasicDetails, error }) {
               minDate={startDate}
               onChange={(newValue, dateType = 'endData') => {
                 setEndDate(newValue);
-                handleDates(newValue, dateType);
+                handleDateDispatch(newValue, dateType);
               }}
               renderInput={(params) => <TextField {...params} />}
             />
@@ -130,15 +119,15 @@ function BasicDetails({ basicDetails, setBasicDetails, error }) {
             name='descriptions'
             multiline
             rows={2}
-            onChange={handleSave}
+            onChange={handelDispatch}
             required={true}
             maxRows={4}
             inputProps={{ maxLength: 1000 }}
             helperText={'max limit 1000'}
           />
-          {errors.descriptions && (
+          {basicDetailsState.errors.descriptions && (
             <div className='tw-text-red-400 tw-font-light'>
-              {errors.descriptions}
+              {basicDetailsState.errors.descriptions}
             </div>
           )}
         </div>

@@ -1,4 +1,4 @@
-import { validateProperty } from 'utils';
+import { validateProperty, validatePropertyReducer } from 'utils';
 import { basicDetailsActions } from 'utils/constant';
 import { BasicDetailSchema } from '../Schema/index';
 export const basicDetailsInitialState = {
@@ -12,10 +12,20 @@ export const basicDetailsInitialState = {
 
 export const basicDetailsReducers = (state, { type, payload }) => {
   switch (type) {
-    case basicDetailsActions.PROJECT_NAME:
+    case basicDetailsActions.DATE:
+      const changeFormate = `${payload.newValue['$y']}-${
+        payload.newValue['$M'] + 1
+      }-${payload.newValue['$D']}`;
+      let itemTest = payload.dateType;
+      return { ...state, [itemTest]: changeFormate };
+      break;
+    default:
       const { name, value } = payload.target;
       let errorData = { ...state.errors };
-      const errorMessage = validateProperty({ payload, BasicDetailSchema });
+      const errorMessage = validatePropertyReducer({
+        payload,
+        BasicDetailSchema,
+      });
       if (errorMessage) {
         errorData[name] = errorMessage;
       } else {
@@ -23,20 +33,8 @@ export const basicDetailsReducers = (state, { type, payload }) => {
       }
 
       state.errors = { ...errorData };
-      console.log('Ha bhai agya mai ', payload);
       let customerData = { ...state };
       customerData[name] = value;
       return { ...state, ...customerData };
-      break;
-    case basicDetailsActions.START_DATE:
-      const changeFormate = `${payload.newValue['$y']}-${
-        payload.newValue['$M'] + 1
-      }-${payload.newValue['$D']}`;
-      let itemTest = payload.dateType;
-      console.log({ ...state, [itemTest]: changeFormate });
-      return { ...state, startDate: changeFormate };
-      break;
-    default:
-      break;
   }
 };

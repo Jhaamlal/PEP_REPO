@@ -54,10 +54,74 @@ export const formValid = ({ basicDetails, peopleDetails, setIsFormValid }) => {
   }
 };
 
+export const formValidReducer = ({
+  basicDetailsState,
+  peopleDetailsState,
+  setIsFormValidReducers,
+  isFormValidReducers,
+}) => {
+  for (const key in basicDetailsState) {
+    const isValueAllExist = basicDetailsState[key].length >= 4;
+    if (!isValueAllExist) {
+      setIsFormValidReducers((prev) => ({
+        ...prev,
+        basicDetailsState: false,
+      }));
+      break;
+    } else {
+      setIsFormValidReducers((prev) => ({
+        ...prev,
+        basicDetailsState: true,
+      }));
+    }
+  }
+  for (const key in peopleDetailsState) {
+    const isValueAllExist = peopleDetailsState[key].length >= 1;
+    if (key === 'director') {
+      const isValueAllExist =
+        !!peopleDetailsState['director']?.['name']?.length >= 1;
+      if (!isValueAllExist) {
+        setIsFormValidReducers((prev) => ({
+          ...prev,
+          peopleDetailsState: false,
+        }));
+        break;
+      } else {
+        setIsFormValidReducers((prev) => ({
+          ...prev,
+          peopleDetailsState: true,
+        }));
+      }
+    } else {
+      if (!isValueAllExist) {
+        setIsFormValidReducers((prev) => ({
+          ...prev,
+          peopleDetailsState: false,
+        }));
+        break;
+      } else {
+        setIsFormValidReducers((prev) => ({
+          ...prev,
+          peopleDetailsState: true,
+        }));
+      }
+    }
+  }
+};
+
 // check each form input validity
 
 export const validateProperty = ({ event, BasicDetailSchema }) => {
   const { name, value } = event.target;
+  const obj = { [name]: value };
+  const subSchema = Joi.object({ [name]: BasicDetailSchema[name] });
+  const result = subSchema.validate(obj);
+  const { error } = result;
+  return error ? error.details[0].message : null;
+};
+
+export const validatePropertyReducer = ({ payload, BasicDetailSchema }) => {
+  const { name, value } = payload.target;
   const obj = { [name]: value };
   const subSchema = Joi.object({ [name]: BasicDetailSchema[name] });
   const result = subSchema.validate(obj);
