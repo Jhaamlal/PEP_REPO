@@ -38,9 +38,7 @@ export const getGrandParentSelection = ({
   let isGPIntermediate = false;
   const allSectorKeys = Object.keys(selectedSectorSegments);
   for (const key of allSectorKeys) {
-    const isKeyChecked =
-      !!allSectorData[selectedSector]?.[key]?.isChecked ||
-      !!allSectorData[selectedSector]?.[key]?.intermediate;
+    const isKeyChecked = !!allSectorData[selectedSector]?.[key]?.isChecked;
     if (isKeyChecked) {
       isChecked += 1;
     }
@@ -95,7 +93,7 @@ export const setIntermediate = ({
   return { ...allSectorData };
 };
 
-export const hasContainChildElement = ({
+export const containChildElement = ({
   allSectorData,
   selectedSector,
   selectedSegment,
@@ -158,4 +156,95 @@ export const addSegmentChild = ({
     return '';
   });
   return allSectorData;
+};
+
+export const addAllSegment = ({
+  allSectorData,
+  selectedSectorsData,
+  selectedSector,
+}) => {
+  Object.keys(selectedSectorsData).map((item, index) => {
+    allSectorData[selectedSector]['totalSegmentSelected'] +=
+      selectedSectorsData[item].length;
+  });
+  let newSegment = createNewSegment({ selectedSectorsData });
+  allSectorData[selectedSector] = {
+    ...allSectorData[selectedSector],
+    isChecked: true,
+    intermediate: false,
+    ...newSegment,
+  };
+
+  // push each child id  into array of selected child
+  Object.keys(selectedSectorsData).map((sectorKey, index) => {
+    selectedSectorsData[sectorKey].map((item) => {
+      allSectorData[selectedSector][sectorKey]['selectedChild'].push(
+        item['id'],
+      );
+    });
+  });
+
+  return allSectorData;
+};
+
+function addChildElement({
+  allSectorData,
+  selectedSector,
+  selectedSegment,
+  selectedItem,
+}) {
+  allSectorData[selectedSector][selectedSegment] = {
+    ...allSectorData[selectedSector][selectedSegment],
+    ...allSectorData[selectedSector][selectedSegment]['selectedChild'].push(
+      selectedItem['id'],
+    ),
+    segmentSelected: 1,
+  };
+
+  allSectorData[selectedSector] = {
+    ...allSectorData[selectedSector],
+    totalSegmentSelected:
+      allSectorData[selectedSector]['totalSegmentSelected'] + 1,
+  };
+  return allSectorData;
+}
+
+export const createParentOfSegment = ({
+  allSectorData,
+  selectedSector,
+  selectedSegment,
+  selectedItem,
+}) => {
+  allSectorData[selectedSector] = {
+    ...allSectorData[selectedSector],
+    [selectedSegment]: {
+      isChecked: true,
+      intermediate: false,
+      segmentSelected: 0,
+      selectedChild: [],
+    },
+  };
+  // push child and update the selected item list
+  allSectorData = addChildElement({
+    allSectorData,
+    selectedSector,
+    selectedSegment,
+    selectedItem,
+  });
+
+  return allSectorData;
+};
+
+export const grandParentState = ({
+  isChecked,
+  intermediate,
+  allSectorData,
+  selectedSector,
+}) => {
+  allSectorData[selectedSector] = {
+    ...allSectorData[selectedSector],
+    isChecked: isChecked,
+    intermediate: intermediate,
+  };
+  return { ...allSectorData };
 };

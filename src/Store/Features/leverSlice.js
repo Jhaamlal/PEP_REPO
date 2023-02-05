@@ -4,9 +4,12 @@ import {
   createNewSegment,
   getGrandParentSelection,
   grandTotal,
-  hasContainChildElement,
+  containChildElement,
   setIntermediate,
   withoutChildElement,
+  addAllSegment,
+  createParentOfSegment,
+  grandParentState,
 } from '../Utils';
 
 const initialState = {
@@ -68,25 +71,10 @@ const leversSlice = createSlice({
 
       // if not checked add item inside sectors
       if (!isChecked) {
-        Object.keys(selectedSectorsData).map((item, index) => {
-          allSectorData[selectedSector]['totalSegmentSelected'] +=
-            selectedSectorsData[item].length;
-        });
-        let newSegment = createNewSegment({ selectedSectorsData });
-        allSectorData[selectedSector] = {
-          ...allSectorData[selectedSector],
-          isChecked: true,
-          intermediate: false,
-          ...newSegment,
-        };
-
-        // push each child id  into array of selected child
-        Object.keys(selectedSectorsData).map((sectorKey, index) => {
-          selectedSectorsData[sectorKey].map((item) => {
-            allSectorData[selectedSector][sectorKey]['selectedChild'].push(
-              item['id'],
-            );
-          });
+        allSectorData = addAllSegment({
+          allSectorData,
+          selectedSectorsData,
+          selectedSector,
         });
       }
       state.sectorData = grandTotal({ allSectorData });
@@ -162,7 +150,7 @@ const leversSlice = createSlice({
 
         // if childElement is not there then add that particular element
         if (!hasChild) {
-          allSectorData = hasContainChildElement({
+          allSectorData = containChildElement({
             allSectorData,
             selectedItem,
             selectedSector,
@@ -183,29 +171,12 @@ const leversSlice = createSlice({
       // if no segment ,it means child has been selected without parent so, it has to be select it's parent also
       if (!hasSegment) {
         // create parent of selected child
-        allSectorData[selectedSector] = {
-          ...allSectorData[selectedSector],
-          [selectedSegment]: {
-            isChecked: true,
-            intermediate: false,
-            segmentSelected: 0,
-            selectedChild: [],
-          },
-        };
-        // push child and update the selected item list
-        allSectorData[selectedSector][selectedSegment] = {
-          ...allSectorData[selectedSector][selectedSegment],
-          ...allSectorData[selectedSector][selectedSegment][
-            'selectedChild'
-          ].push(selectedItem['id']),
-          segmentSelected: 1,
-        };
-
-        allSectorData[selectedSector] = {
-          ...allSectorData[selectedSector],
-          totalSegmentSelected:
-            allSectorData[selectedSector]['totalSegmentSelected'] + 1,
-        };
+        allSectorData = createParentOfSegment({
+          allSectorData,
+          selectedSector,
+          selectedSegment,
+          selectedItem,
+        });
       }
 
       state.sectorData = grandTotal({ allSectorData });
@@ -234,18 +205,20 @@ const leversSlice = createSlice({
       // if parent selected then,see the GrandParent state
       if (isAllChildSelected) {
         if (isGPSelected) {
-          allSectorData[selectedSector] = {
-            ...allSectorData[selectedSector],
+          allSectorData = grandParentState({
+            allSectorData,
+            selectedSector,
             isChecked: true,
             intermediate: false,
-          };
+          });
         }
         if (!isGPSelected) {
-          allSectorData[selectedSector] = {
-            ...allSectorData[selectedSector],
+          allSectorData = grandParentState({
+            allSectorData,
+            selectedSector,
             isChecked: false,
             intermediate: true,
-          };
+          });
         }
 
         allSectorData[selectedSector][selectedSegment] = {
