@@ -23,7 +23,6 @@ export const basicDetailsReducers = (state, { type, payload }) => {
       }
 
       state.errors = { ...errorData };
-      console.log('Ha bhai agya mai ', payload);
       let customerData = { ...state };
       customerData[name] = value;
       return { ...state, ...customerData };

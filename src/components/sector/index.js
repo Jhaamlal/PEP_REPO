@@ -10,6 +10,8 @@ import {
   parentUpdate,
 } from '../../store/Features/leverSlice';
 import { sectorsData } from 'utils';
+import { Segment } from './Segment';
+import { SegmentChild } from './SegmentChild';
 
 function Sectors({ selectedLever, leverObject }) {
   const [selectedSegment, setSelectedSegment] = useState('');
@@ -87,72 +89,21 @@ function Sectors({ selectedLever, leverObject }) {
               }
             />
           </div>
-          {Object.keys(selectedSectorsData).map((item, index) => {
-            const isChecked = !!selector[selectedSector]?.[item]?.['isChecked'];
-            const isInterMediate =
-              !!selector[selectedSector]?.[item]?.['intermediate'];
-            return (
-              <div
-                className={`tw-ml-2 tw-flex tw-justify-between active:tw-bg-blue-200`}
-                key={index}
-              >
-                <FormControlLabel
-                  label={item}
-                  control={
-                    <Checkbox
-                      checked={isChecked}
-                      indeterminate={isInterMediate}
-                    />
-                  }
-                  onClick={(event) =>
-                    parentChangehandler({ item, index, event })
-                  }
-                />
-                <AiOutlineArrowRight
-                  className='tw-self-center tw-mr-4 tw-cursor-pointer'
-                  onClick={(event) => showSegmentChild({ event, item })}
-                />
-              </div>
-            );
-          })}
+          <Segment
+            selectedSectorsData={selectedSectorsData}
+            selector={selector}
+            selectedSector={selectedSector}
+            parentChangehandler={parentChangehandler}
+            showSegmentChild={showSegmentChild}
+          />
         </div>
-        <div className='tw-col-span-5 tw-bg-slate-50 '>
-          <div className='tw-grid tw-grid-cols-4 tw-p-2 tw-gap-4 tw-bg-slate-800 tw-text-white'>
-            <div className='tw-col-span-1'>Lever Name</div>
-            <div className='tw-col-span-1'>Category</div>
-            <div className='tw-col-span-1'>Location</div>
-            <div className='tw-col-span-1'>Description</div>
-          </div>
-          {selectedSectorsData[selectedSegment]?.map((item, index) => {
-            const isChecked = !!selector[selectedSector]?.[selectedSegment]?.[
-              'selectedChild'
-            ]?.includes(item.id);
-            return (
-              <div
-                className='tw-grid tw-grid-cols-4 tw-px-2 tw-gap-2'
-                key={index}
-              >
-                <FormControlLabel
-                  label={item['name']}
-                  control={<Checkbox checked={isChecked} />}
-                  onClick={(event) =>
-                    childChangeHandler({ item, event, index })
-                  }
-                  className='tw-col-span-1'
-                />
-                <div className='tw-col-span-1 tw-self-center'>
-                  {item['category']}
-                </div>
-                <div className='tw-col-span-1 tw-self-center'>
-                  {item['location']}
-                </div>
-                <div className='tw-col-span-1 tw-self-center'>
-                  {item['description']}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <SegmentChild
+          selectedSectorsData={selectedSectorsData}
+          selectedSegment={selectedSegment}
+          selector={selector}
+          childChangeHandler={childChangeHandler}
+          selectedSector={selectedSector}
+        />
       </div>
     </>
   );

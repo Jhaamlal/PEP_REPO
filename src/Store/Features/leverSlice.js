@@ -220,7 +220,7 @@ const leversSlice = createSlice({
             intermediate: true,
           });
         }
-
+        // this is still lower level of abstraction then it can  be take out
         allSectorData[selectedSector][selectedSegment] = {
           ...allSectorData[selectedSector][selectedSegment],
           isChecked: true,
