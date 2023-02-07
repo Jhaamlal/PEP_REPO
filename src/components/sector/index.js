@@ -8,7 +8,7 @@ import {
   childUpdate,
   grandParentUpdate,
   parentUpdate,
-} from '../../store/Features/leverSlice';
+} from '../../store/Features/LeverSlice';
 import { sectorsData } from 'utils';
 import { Segment } from './Segment';
 import { SegmentChild } from './SegmentChild';

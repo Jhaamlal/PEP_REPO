@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import leversReducers from './Features/leverSlice';
+import leversReducers from './Features/LeverSlice';
 
 const store = configureStore({
   reducer: {

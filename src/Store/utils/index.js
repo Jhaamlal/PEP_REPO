@@ -27,6 +27,7 @@ export const createNewSegment = ({ selectedSectorsData }) => {
   return obj2;
 };
 
+// to find get the if the grandParent is selected or Not
 export const getGrandParentSelection = ({
   selectedSectorSegments,
   allSectorData,
@@ -59,6 +60,7 @@ export const getGrandParentSelection = ({
   return { isGPSelected, isGPIntermediate };
 };
 
+// set Intermediate  state to parent if not all child are selected
 export const setIntermediate = ({
   allSectorData,
   selectedSector,
@@ -93,6 +95,7 @@ export const setIntermediate = ({
   return { ...allSectorData };
 };
 
+// This function put the,  selected parent children in in the array
 export const containChildElement = ({
   allSectorData,
   selectedSector,
@@ -158,6 +161,7 @@ export const addSegmentChild = ({
   return allSectorData;
 };
 
+// When in grandParent item is selected ,this makes item child put in the selected segment array
 export const addAllSegment = ({
   allSectorData,
   selectedSectorsData,
@@ -235,6 +239,7 @@ export const createParentOfSegment = ({
   return allSectorData;
 };
 
+// set the grandParent state
 export const grandParentState = ({
   isChecked,
   intermediate,

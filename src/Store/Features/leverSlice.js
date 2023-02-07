@@ -48,7 +48,7 @@ const initialParentObj = {
   totalSegmentSelected: 0,
 };
 
-const leversSlice = createSlice({
+const LeversSlice = createSlice({
   name: 'Levers',
   initialState,
   reducers: {
@@ -232,6 +232,6 @@ const leversSlice = createSlice({
   },
 });
 
-export default leversSlice.reducer;
+export default LeversSlice.reducer;
 export const { grandParentUpdate, parentUpdate, childUpdate } =
-  leversSlice.actions;
+  LeversSlice.actions;

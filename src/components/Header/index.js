@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { logo } from 'utils/constant';
+import { LOGO } from 'utils/Constant';
 
 function Header() {
   let headers = ['Home', 'Lever', 'My Project'];
@@ -22,7 +22,7 @@ function Header() {
       <div className='tw-flex  tw-align-middle tw-justify-center'>
         {/* image header and name */}
         <img
-          src={logo}
+          src={LOGO}
           alt='Logo'
           className='tw-rounded-full tw-w-16 tw-h-16'
         />

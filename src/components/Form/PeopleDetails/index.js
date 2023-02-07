@@ -8,7 +8,7 @@ import {
 
 import React from 'react';
 
-import { nameEmail } from '../../../utils/constant';
+import { NAME_EMAIL } from '../../../utils/Constant';
 import { ProjectName } from 'components/UI';
 
 function PeopleFormDetails({ peopleDetails, setPeopleDetails }) {
@@ -50,7 +50,7 @@ function PeopleFormDetails({ peopleDetails, setPeopleDetails }) {
               multiple
               id='collaborators'
               className='tw-w-[90%]'
-              options={nameEmail}
+              options={NAME_EMAIL}
               onChange={(_e, newValue) => {
                 selectChangeHandler(_e, newValue);
               }}
@@ -69,7 +69,7 @@ function PeopleFormDetails({ peopleDetails, setPeopleDetails }) {
               Engagement director
             </InputLabel>
             <Autocomplete
-              options={nameEmail}
+              options={NAME_EMAIL}
               className='tw-w-[90%]'
               id='director'
               disablePortal

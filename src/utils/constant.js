@@ -1,4 +1,4 @@
-export const nameEmail = [
+export const NAME_EMAIL = [
   { name: 'ravi', emil: 'shankar' },
   { name: 'rohit', emil: 'rohit' },
   { name: 'sandeep', emil: 'sandeepk' },
@@ -6,5 +6,5 @@ export const nameEmail = [
   { name: 'Jay', emil: 'jay@gmailcom' },
 ];
 
-export const logo =
-  'https://thumbs.dreamstime.com/b/teamwork-community-logo-design-vector-adoption-social-network-template-156215000.jpg';
+export const LOGO =
+  'https://thumbs.dreamstime.com/b/teamwork-community-LOGO-design-vector-adoption-social-network-template-156215000.jpg';
